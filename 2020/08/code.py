@@ -58,18 +58,23 @@ class Machine:
         self.ip += op - 1
 
     def patch(self) -> None:
-        r = {"jmp": "nop", "nop": "jmp"}
-        for i, ins in enumerate(self.tape):
-            if ins.code in r:
-                old_ins = ins
-                self.tape[i] = Instruction(r[ins.code], ins.op)
-                self.reset()
-                try:
-                    self.run()
-                except InfiniteLoop:
-                    self.tape[i] = old_ins
-                    continue
-                return
+        self.reset()
+        try:
+            self.run()
+        except InfiniteLoop:
+            r = {"jmp": "nop", "nop": "jmp"}
+            for (i,) in self.visited:
+                ins = self.tape[i]
+                if ins.code in r:
+                    old_ins = ins
+                    self.tape[i] = Instruction(r[ins.code], ins.op)
+                    self.reset()
+                    try:
+                        self.run()
+                    except InfiniteLoop:
+                        self.tape[i] = old_ins
+                        continue
+                    return
 
 
 try:
