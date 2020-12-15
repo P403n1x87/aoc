@@ -1,5 +1,7 @@
 # Advent of Code
 
 ## Requirements
-- Python >= 3.9
+
 - GHC >= 8.0.2
+- NASM >= 2.13.02
+- Python >= 3.9
