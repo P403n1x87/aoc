@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -e
+set -u
+
+year="${1}"
+day="${2}"
+
+# local
+dest="$year/$day"
+
+# remote
+aoc="https://adventofcode.com"
+challenge="$aoc/$year/day/$day"
+
+test -d $dest || mkdir -p $dest
+
+echo "# $challenge" > $dest/code.py
+curl -s -H "Cookie: session=${AOC_SESSION_ID}" $challenge/input > $dest/input.txt
