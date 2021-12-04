@@ -21,7 +21,7 @@ echo "\
 import os
 
 
-def resolve(name="input.txt"):
+def resolve(name=\"input.txt\"):
     return os.path.join(os.path.dirname(__file__), name)
     
     
