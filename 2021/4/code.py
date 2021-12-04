@@ -8,28 +8,25 @@ def resolve(name="input.txt"):
     return os.path.join(os.path.dirname(__file__), name)
 
 
-class Board:
+class Board(list):
     def __init__(self, data):
         if not data[0]:
             raise EOFError()
-        self.data = data
-
-    def __getitem__(self, i):
-        return self.data[i]
+        super().__init__(data)
 
     def check(self):
-        for r in self.data:
+        for r in self:
             if r == ["*"] * 5:
                 return True
 
         for i in range(5):
-            if all(self.data[j][i] == "*" for j in range(5)):
+            if all(self[j][i] == "*" for j in range(5)):
                 return True
 
         return False
 
     def mark(self, n):
-        for r in self.data:
+        for r in self:
             for i, e in enumerate(r):
                 if e == n:
                     r[i] = "*"
@@ -63,7 +60,7 @@ def solve(datafile="input.txt"):
     bs = []
     for n in ns:
         ws = []
-        for i, b in enumerate(list(boards)):
+        for i, b in enumerate(boards):
             b.mark(n)
             if b.check():
                 bs.append((n, b))
