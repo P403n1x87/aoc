@@ -25,8 +25,18 @@ def resolve(name=\"input.txt\"):
     return os.path.join(os.path.dirname(__file__), name)
 
 
-def solve():
+def solve(datafile=\"input.txt\"):
     pass
+
+
+def test():
+    assert solve(\"test.txt\")
+
+
+test()
+print(solve())
 " > $dest/code.py
 
 curl -s -H "Cookie: session=${AOC_SESSION_ID}" $challenge/input > $dest/input.txt
+
+touch $dest/test.txt
