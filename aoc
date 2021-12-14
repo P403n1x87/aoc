@@ -30,7 +30,7 @@ def solve(datafile=\"input.txt\"):
 
 
 def test():
-    assert solve(\"test.txt\")
+    assert solve(\"test.txt\") is None
 
 
 test()
