@@ -19,7 +19,7 @@ class Page(set):
 
     def fold(self, z):
         n = z / abs(z)
-        for k in [_ for _ in self if _.imag >= z.imag and _.real >= z.real]:
+        for k in [_ for _ in self if (n.conjugate() * _).real > abs(z)]:
             self.remove(k)
             self.add(k - 2 * (n * (n.conjugate() * k).real - z))
 
