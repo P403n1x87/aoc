@@ -1,19 +1,10 @@
 # https://adventofcode.com/2022/day/1
 
-from pathlib import Path
+from aoctk.input import get_groups
 
 
-def resolve(name="input.txt") -> Path:
-    return Path(__file__).parent / name
-
-
-def solve(n, datafile="input.txt"):
-    return sum(
-        sorted(
-            sum(int(_) for _ in g.split("\n"))
-            for g in resolve(datafile).read_text().strip().split("\n\n")
-        )[-n:]
-    )
+def solve(n, data="input.txt"):
+    return sum(sorted(sum(_) for _ in get_groups(data, int))[-n:])
 
 
 def test():

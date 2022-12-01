@@ -18,14 +18,10 @@ test -d $dest || mkdir -p $dest
 echo "\
 # $challenge
 
-import os
+from aoctk.input import get_lines
 
 
-def resolve(name=\"input.txt\"):
-    return os.path.join(os.path.dirname(__file__), name)
-
-
-def solve(datafile=\"input.txt\"):
+def solve(data=\"input.txt\"):
     pass
 
 
