@@ -3,19 +3,41 @@
 set -e
 set -u
 
-year="${1}"
-day="${2}"
 
-# local
-dest="$year/$day"
+function token {
+    t=${2}
 
-# remote
-aoc="https://adventofcode.com"
-challenge="$aoc/$year/day/$day"
+    echo $t > .token
+}
 
-test -d $dest || mkdir -p $dest
 
-echo "\
+function check_token {
+    if [ ! -f .token ]; then
+        echo "No token found. Please run 'aoc token <token>'"
+        exit 1
+    fi
+}
+
+
+function pull {
+    year="${2}"
+    day="${3}"
+
+    # Check that we have a token
+    check_token
+
+    token=$(cat .token)
+
+    # local
+    dest="$year/$day"
+
+    # remote
+    aoc="https://adventofcode.com"
+    challenge="$aoc/$year/day/$day"
+
+    test -d $dest || mkdir -p $dest
+
+    echo "\
 # $challenge
 
 from aoctk.input import get_lines
@@ -29,10 +51,50 @@ def test():
     assert solve(\"test.txt\") is None
 
 
-test()
-print(solve())
+def part_one():
+    pass
+
+
+def part_two():
+    pass\
 " > $dest/code.py
 
-curl -s -H "Cookie: session=${AOC_SESSION_ID}" $challenge/input > $dest/input.txt
+    curl -s -H "Cookie: session=${token}" $challenge/input > $dest/input.txt
 
-touch $dest/test.txt
+    touch $dest/test.txt
+}
+
+
+function run {
+    year="${2}"
+    day="${3}"
+
+    source .venv/bin/activate
+    
+    PYTHONPATH=$year/$day python -c "import code; code.test(); print('Test OK'); print('Part 1:', code.part_one()); print('Part 2:', code.part_two())"
+    
+    deactivate
+}
+
+
+function main {
+    cmd="$1"
+
+    case $cmd in
+        token)
+            token $@
+            ;;
+        pull)
+            pull $@
+            ;;
+        run)
+            run $@
+            ;;
+        *)
+            echo "Unknown command: $cmd"
+            ;;
+    esac
+}
+
+
+main $@

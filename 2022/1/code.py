@@ -12,6 +12,9 @@ def test():
     assert solve(3, "test.txt") == 45000
 
 
-test()
-print(solve(1))
-print(solve(3))
+def part_one():
+    return solve(1)
+
+
+def part_two():
+    return solve(3)
