@@ -4,6 +4,32 @@ set -e
 set -u
 
 
+function init {
+    if [ -d .venv ]; then
+        echo "Already initialised."
+        return
+    fi
+
+    echo "Creating a new virtual environment using $(python3 --version)"
+    python3 -m venv .venv
+
+    echo "Installing aoctk"
+    source .venv/bin/activate
+    pip install aoctk
+    deactivate
+
+    echo "Done."
+}
+
+
+function check_init {
+    if [ ! -d .venv ]; then
+        echo "Not initialised. Run 'aoc init' first."
+        exit 1
+    fi
+}
+
+
 function token {
     t=${2}
 
@@ -43,20 +69,17 @@ function pull {
 from aoctk.input import get_lines
 
 
-def solve(data=\"input.txt\"):
+def part_one(data=\"input.txt\"):
     pass
+
+
+def part_two(data=\"input.txt\"):
+    pass\
 
 
 def test():
-    assert solve(\"test.txt\") is None
-
-
-def part_one():
-    pass
-
-
-def part_two():
-    pass\
+    assert part_one(\"test.txt\") is None
+    assert part_two(\"test.txt\") is None\
 " > $dest/code.py
 
     curl -s -H "Cookie: session=${token}" $challenge/input > $dest/input.txt
@@ -69,10 +92,10 @@ function run {
     year="${2}"
     day="${3}"
 
+    check_init
+
     source .venv/bin/activate
-    
-    PYTHONPATH=$year/$day python -c "import code; code.test(); print('Test OK'); print('Part 1:', code.part_one()); print('Part 2:', code.part_two())"
-    
+        PYTHONPATH=$year/$day python -c "import code; code.test(); print('Test OK'); print('Part 1:', code.part_one()); print('Part 2:', code.part_two())"
     deactivate
 }
 
@@ -81,6 +104,9 @@ function main {
     cmd="$1"
 
     case $cmd in
+        init)
+            init
+            ;;
         token)
             token $@
             ;;
