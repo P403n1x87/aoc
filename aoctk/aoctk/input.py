@@ -1,5 +1,6 @@
 import sys
 import typing as t
+from itertools import islice
 from pathlib import Path
 from types import FrameType
 
@@ -43,3 +44,17 @@ def get_groups(
 
     if group:
         yield tuple(group)
+
+
+def get_many(
+    filename: str = "input.txt",
+    n: int = 1,
+    transformer: t.Callable[[str], t.Any] = lambda _: _,
+) -> t.Generator[t.Tuple[t.Any, ...], None, None]:
+    """Get groups of n lines from the input file.
+
+    Elements can be transformed during grouping by providing a transformer
+    function.
+    """
+    lines = get_lines(filename)
+    yield from iter(lambda: tuple(transformer(_) for _ in islice(lines, n)), ())
