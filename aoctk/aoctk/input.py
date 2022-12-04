@@ -58,3 +58,16 @@ def get_many(
     """
     lines = get_lines(filename)
     yield from iter(lambda: tuple(transformer(_) for _ in islice(lines, n)), ())
+
+
+def get_tuples(
+    filename: str = "input.txt",
+    sep: str = " ",
+    transformer: t.Callable[[str], t.Any] = lambda _: _,
+) -> t.Generator[t.Tuple[t.Any, ...], None, None]:
+    """Get groups of lines from the input file.
+
+    Groups are separated by blank lines. Each line can be transformed prior to
+    grouping by passing a transformer function.
+    """
+    return (tuple(transformer(_) for _ in r.split(sep)) for r in get_lines(filename))
