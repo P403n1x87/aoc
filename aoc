@@ -46,8 +46,8 @@ function check_token {
 
 
 function pull {
-    year="${2}"
-    day="${3}"
+    year="${2:-$(date +%Y)}"
+    day="${3:-$(date +%-d)}"
 
     # Check that we have a token
     check_token
@@ -89,8 +89,8 @@ def test():
 
 
 function run {
-    year="${2}"
-    day="${3}"
+    year="${2:-$(date +%Y)}"
+    day="${3:-$(date +%-d)}"
 
     check_init
 
