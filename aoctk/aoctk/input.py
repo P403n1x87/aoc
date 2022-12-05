@@ -21,7 +21,7 @@ def get_path(filename: str = "input.txt") -> Path:
 
 def get_lines(filename: str = "input.txt") -> t.Generator[str, None, None]:
     """Get the lines from the input file."""
-    return (_.strip() for _ in get_path(filename).open())
+    return (_[:-1] for _ in get_path(filename).open())
 
 
 def get_groups(
