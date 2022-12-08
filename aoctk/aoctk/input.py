@@ -4,6 +4,8 @@ from itertools import islice
 from pathlib import Path
 from types import FrameType
 
+from aoctk.data import Unbound2DGrid
+
 
 def get_path(filename: str = "input.txt") -> Path:
     """Get the path to the input file.
@@ -71,3 +73,21 @@ def get_tuples(
     after splitting by providing a transformer function.
     """
     return (tuple(transformer(_) for _ in r.split(sep)) for r in get_lines(filename))
+
+
+def get_unbound_2d_grid(
+    filename: str = "input.txt",
+    transformer: t.Callable[[str], t.Any] = lambda _: _,
+) -> t.Dict[complex, t.Any]:
+    """Get a 2D grid from the input file.
+
+    The grid is not bound by a fixed size. The elements can be transformed by
+    providing a transformer function.
+    """
+    return Unbound2DGrid(
+        (
+            (complex(j, i), transformer(c))
+            for i, r in enumerate(get_lines(filename))
+            for j, c in enumerate(r)
+        )
+    )
