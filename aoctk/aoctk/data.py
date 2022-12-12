@@ -1,3 +1,4 @@
+import heapq
 from dataclasses import dataclass
 
 
@@ -42,3 +43,32 @@ class Unbound2DGrid(dict):
             for x in range(xr.lo, xr.hi + 1):
                 print(self.get(x + y * 1j, " "), end="")
             print()
+
+
+class Graph:
+    @dataclass
+    class WeightedNode:
+        weight: int
+        node: object
+
+        def __lt__(self, other):
+            return self.weight < other.weight
+
+    def adj(self, n):
+        raise NotImplementedError()
+
+    def dijkstra(self, start, end):
+        seen, q = set(), [self.WeightedNode(0, start)]
+        heapq.heapify(q)
+
+        while q:
+            wn = heapq.heappop(q)
+            if wn.node == end:
+                return wn.weight
+            if wn.node in seen:
+                continue
+            seen.add(wn.node)
+            for t in self.adj(wn.node):
+                heapq.heappush(q, self.WeightedNode(wn.weight + 1, t))
+
+        return float("inf")
