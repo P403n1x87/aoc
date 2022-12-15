@@ -1,4 +1,5 @@
 import heapq
+import typing as t
 from dataclasses import dataclass
 
 
@@ -12,6 +13,60 @@ class Range:
 
     def overlaps(self, other: "Range") -> bool:
         return self.hi >= other.lo and other.hi >= self.lo
+
+    def __and__(self, other: "Range") -> t.Optional["Range"]:
+        return (
+            Range(max(self.lo, other.lo), min(self.hi, other.hi))
+            if self.hi >= other.lo and other.hi >= self.lo
+            else None
+        )
+
+    def __len__(self) -> int:
+        return self.hi - self.lo + 1
+
+    def __iter__(self):
+        return iter(range(self.lo, self.hi + 1))
+
+    def clip(self, lo: int, hi: int) -> None:
+        """Clip the range to the given bounds."""
+        self.lo = max(self.lo, lo)
+        self.hi = min(self.hi, hi)
+
+    def split(self, *xs: int) -> t.Generator["Range", None, None]:
+        """Split the range at the given points.
+
+        The points themselves are not included in the ranges.
+        """
+        a = self.lo
+        for x in sorted(_ for _ in xs if self.lo <= _ <= self.hi):
+            yield Range(a, x - 1)
+            a = x + 1
+        yield Range(a, self.hi)
+
+    def __bool__(self) -> bool:
+        return self.lo <= self.hi
+
+    @classmethod
+    def weighted_union(
+        cls, ranges: t.Iterable["Range"]
+    ) -> t.List[t.Tuple["Range", int]]:
+        """List of ranges with weight that describe the union of the given ranges.
+
+        The weight is the number of times the range is included in the union.
+        """
+        wranges = []
+        for r in ranges:
+            for s, w in list(wranges):
+                rs = r & s
+                if rs is not None:
+                    wranges.append((rs, -1 * w))
+            wranges.append((r, 1))
+        return wranges
+
+
+def weighted_union_size(weighted_ranges: t.Iterable[t.Tuple[Range, int]]) -> int:
+    """Helper for computing the size of a weighted union of ranges."""
+    return sum(len(r) * w * bool(r) for r, w in weighted_ranges)
 
 
 class Unbound2DGrid(dict):
