@@ -112,6 +112,9 @@ class Graph:
     def adj(self, n):
         raise NotImplementedError()
 
+    def weight(self, n):
+        raise NotImplementedError()
+
     def dijkstra(self, start, end):
         seen, q = set(), [self.WeightedNode(0, start)]
         heapq.heapify(q)
