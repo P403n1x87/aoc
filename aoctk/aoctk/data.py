@@ -8,8 +8,10 @@ class Range:
     lo: int
     hi: int
 
-    def __contains__(self, other: "Range") -> bool:
-        return self.lo <= other.lo and other.hi <= self.hi
+    def __contains__(self, other: t.Union["Range", int]) -> bool:
+        if isinstance(other, Range):
+            return self.lo <= other.lo and other.hi <= self.hi
+        return self.lo <= other <= self.hi
 
     def overlaps(self, other: "Range") -> bool:
         return self.hi >= other.lo and other.hi >= self.lo
@@ -130,3 +132,26 @@ class Graph:
                 heapq.heappush(q, self.WeightedNode(wn.weight + 1, t))
 
         return float("inf")
+
+
+class Vector:
+    def __init__(self, *args):
+        self._c = tuple(args)
+
+    def __add__(self, other):
+        return Vector(*(a + b for a, b in zip(self._c, other._c)))
+
+    def __eq__(self, other: object) -> bool:
+        return self._c == other._c
+
+    def within(self, bounds):
+        return all(c in r for c, r in zip(self._c, bounds))
+
+    def __getitem__(self, i):
+        return self._c[i]
+
+    def __hash__(self) -> int:
+        return hash(self._c)
+
+    def __repr__(self) -> str:
+        return f"Vector{self._c}"
