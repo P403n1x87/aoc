@@ -136,16 +136,39 @@ class Graph:
 
 class Vector:
     def __init__(self, *args):
-        self._c = tuple(args)
+        self._c = args
 
     def __add__(self, other):
         return Vector(*(a + b for a, b in zip(self._c, other._c)))
+
+    def __radd__(self, other):
+        if other != 0:
+            raise ValueError("Vector can only be added another vector or 0")
+        return self
+
+    def __sub__(self, other):
+        return Vector(*(a - b for a, b in zip(self._c, other._c)))
 
     def __eq__(self, other: object) -> bool:
         return self._c == other._c
 
     def within(self, bounds):
         return all(c in r for c, r in zip(self._c, bounds))
+
+    @classmethod
+    def e(cls, i, n):
+        return cls(*(_ == i for _ in range(n)))
+
+    def __mul__(self, other):
+        return Vector(*(a * other for a in self._c))
+
+    def __rmul__(self, other):
+        return self * other
+
+    def __truediv__(self, other):
+        if not other:
+            raise ZeroDivisionError()
+        return Vector(*(a / other for a in self._c))
 
     def __getitem__(self, i):
         return self._c[i]
