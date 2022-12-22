@@ -103,6 +103,9 @@ class Unbound2DGrid(dict):
 
 
 class Graph:
+    def __init__(self, data):
+        self.data = data
+
     @dataclass
     class WeightedNode:
         weight: int
