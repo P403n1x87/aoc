@@ -1,6 +1,10 @@
 import heapq
 import typing as t
 from dataclasses import dataclass
+from itertools import product
+
+D4 = tuple(1j ** i for i in range(4))
+D8 = tuple(complex(i, j) for i in (-1, 0, 1) for j in (-1, 0, 1) if i or j)
 
 
 @dataclass
@@ -100,6 +104,10 @@ class Unbound2DGrid(dict):
             for x in range(xr.lo, xr.hi + 1):
                 print(self.get(x + y * 1j, " "), end="")
             print()
+
+    def iter_bounds(self):
+        """Iterate  over all points within the bounds of the grid."""
+        return iter(product(*self.bounds()))
 
 
 class Graph:
