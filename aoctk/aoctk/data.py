@@ -6,6 +6,8 @@ from itertools import product
 D4 = tuple(1j ** i for i in range(4))
 D8 = tuple(complex(i, j) for i in (-1, 0, 1) for j in (-1, 0, 1) if i or j)
 
+M4 = {">": 1, "<": -1, "v": 1j, "^": -1j}
+
 
 @dataclass
 class Range:
@@ -121,6 +123,12 @@ class Graph:
 
         def __lt__(self, other):
             return self.weight < other.weight
+
+        def __eq__(self, other):
+            return self.__dict__ == other.__dict__
+
+        def __hash__(self):
+            return hash((self.weight, self.node))
 
     def adj(self, n):
         raise NotImplementedError()
