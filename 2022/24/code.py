@@ -1,6 +1,5 @@
 # https://adventofcode.com/2022/day/24
 
-import heapq
 from collections import defaultdict
 from math import lcm
 
@@ -20,8 +19,7 @@ class Valley(Graph):
         self.time_offset = 0
         self.reversed = 1
 
-        # Precompute all possible blizzard. We might not need them all but
-        # hey, life's easier this way.
+        # Precompute all possible blizzards.
         s = defaultdict(list)
         for z, d in self.grid.items():
             if d != "#":
@@ -38,7 +36,7 @@ class Valley(Graph):
                     n[w].append(b)
             s = self.states[t] = n
 
-        # Add walls around entry and exit
+        # Add walls around entry and exit.
         for _ in range(3):
             self.grid[complex(_, -1)] = "#"
             self.grid[complex(self.w + 1 - _, self.h + 2)] = "#"
@@ -53,26 +51,13 @@ class Valley(Graph):
             yield z
 
     def cross(self):
-        seen, q = set(), [self.WeightedNode(0, self.entry)]
-        heapq.heapify(q)
-
-        while q:
-            wn = heapq.heappop(q)
-            if wn.node == self.exit:
-                self.min_t = min(self.min_t, wn.weight)
-                continue
-            if wn in seen or wn.weight + md(wn.node, self.exit) >= self.min_t:
-                continue
-            seen.add(wn)
-            for z in self.adj(wn.weight, wn.node):
-                heapq.heappush(q, self.WeightedNode(wn.weight + 1, z))
-
         try:
+            self.min_t = self.brachistochrone(self.entry, self.exit, md)
             return self.min_t
         finally:
             self.reversed = -self.reversed
             self.time_offset += self.min_t
-            self.entry, self.exit, self.min_t = self.exit, self.entry, float("inf")
+            self.entry, self.exit = self.exit, self.entry
 
 
 def part_one(data="input.txt"):

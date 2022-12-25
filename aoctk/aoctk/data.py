@@ -152,6 +152,28 @@ class Graph:
 
         return float("inf")
 
+    def brachistochrone(self, start, end, heuristic=lambda n, e: 0):
+        """Return the minimum time to travel from start to end.
+
+        The heuristic is used to speed up the search by giving an estimate of
+        the distance from the current node to the end node (e.g. Manhattan).
+        """
+        seen, q, min_t = set(), [self.WeightedNode(0, start)], float("inf")
+        heapq.heapify(q)
+
+        while q:
+            wn = heapq.heappop(q)
+            if wn.node == end:
+                min_t = min(min_t, wn.weight)
+                continue
+            if wn in seen or wn.weight + heuristic(wn.node, end) >= min_t:
+                continue
+            seen.add(wn)
+            for _ in self.adj(wn.weight, wn.node):
+                heapq.heappush(q, self.WeightedNode(wn.weight + 1, _))
+
+        return min_t
+
 
 class Vector:
     def __init__(self, *args):
