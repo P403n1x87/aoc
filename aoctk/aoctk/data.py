@@ -197,3 +197,11 @@ class Vector:
 
     def __repr__(self) -> str:
         return f"Vector{self._c}"
+
+
+class bij(dict):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if len(set(self.keys())) != len(set(self.values())):
+            raise ValueError("Not a bijection")
+        self.inv = {v: k for k, v in self.items()}
