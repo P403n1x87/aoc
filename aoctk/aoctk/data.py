@@ -3,7 +3,7 @@ import typing as t
 from dataclasses import dataclass
 from itertools import product
 
-D4 = tuple(1j ** i for i in range(4))
+D4 = tuple(1j**i for i in range(4))
 D8 = tuple(complex(i, j) for i in (-1, 0, 1) for j in (-1, 0, 1) if i or j)
 
 M4 = {">": 1, "<": -1, "v": 1j, "^": -1j}
@@ -53,6 +53,24 @@ class Range:
 
     def __bool__(self) -> bool:
         return self.lo <= self.hi
+
+    def shift(self, d: int) -> "Range":
+        """Shift the range by the given amount."""
+        return type(self)(self.lo + d, self.hi + d)
+
+    def disjoint_union(self, other: "Range") -> t.List["Range"]:
+        """List of ranges that describe the disjoint union of the given ranges."""
+        o = self & other
+        if o is None:
+            return [self, other]
+        lo = min(self.lo, other.lo)
+        hi = max(self.hi, other.hi)
+        parts = [o]
+        if lo < o.lo:
+            parts.append(Range(lo, o.lo - 1))
+        if o.hi < hi:
+            parts.append(Range(o.hi + 1, hi))
+        return parts
 
     @classmethod
     def weighted_union(
