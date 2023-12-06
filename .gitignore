@@ -24,3 +24,4 @@ cabal.project.local~
 .venv/
 **__pycache__/
 .token
+**input.txt
