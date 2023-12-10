@@ -129,6 +129,10 @@ class Unbound2DGrid(dict):
         """Iterate  over all points within the bounds of the grid."""
         return iter(product(*self.bounds()))
 
+    def find(self, value):
+        """Find the first point with the given value."""
+        return next(k for k, v in self.items() if v == value)
+
 
 class Graph:
     def __init__(self, data):
