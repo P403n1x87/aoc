@@ -95,7 +95,21 @@ function run {
     check_init
 
     source .venv/bin/activate
-        PYTHONPATH=$year/$day python -c "import code; code.test(); print('Test OK'); print('Part 1:', code.part_one()); print('Part 2:', code.part_two())"
+        PYTHONPATH=$year/$day python -c "
+import code
+code.test()
+print('Test OK')
+from time import monotonic_ns as time
+
+def run_part(n, f):
+    start = time()
+    result = f()
+    end = time()
+    print(f'Part {n}\t({(end - start) / 1e6:.3f}ms)\t{result}')
+
+for n, f in [(1, code.part_one), (2, code.part_two)]:
+    run_part(n, f)
+"
     deactivate
 }
 
