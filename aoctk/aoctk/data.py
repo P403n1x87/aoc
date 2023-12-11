@@ -1,7 +1,8 @@
 import heapq
 import typing as t
+from collections import deque
 from dataclasses import dataclass
-from itertools import product
+from itertools import chain, pairwise, product
 
 D4 = tuple(1j**i for i in range(4))
 D8 = tuple(complex(i, j) for i in (-1, 0, 1) for j in (-1, 0, 1) if i or j)
@@ -249,3 +250,46 @@ class bij(dict):
         if len(set(self.keys())) != len(set(self.values())):
             raise ValueError("Not a bijection")
         self.inv = {v: k for k, v in self.items()}
+
+
+class Path2D(list):
+    def __reversed__(self):
+        return type(self)(self[::-1])
+
+    def area(self):
+        """Implement the shoelace formula. The sign gives the orientation."""
+        return (
+            int(
+                sum(
+                    (a.conjugate() * b).imag
+                    for a, b in pairwise(chain(self, [self[0]]))
+                )
+            )
+            / 2
+        )
+
+    def orientation(self) -> int:
+        """Return the orientation of the path."""
+        return 2 * (self.area() > 0) - 1
+
+    def pick(self):
+        """Use Pick's Theorem to compute the number of points inside the path."""
+        return int(abs(self.area()) + 1 - (len(self) / 2))
+
+    def interior(self):
+        """Get all the points in the interior of the path."""
+        # Get all the inside points close to the path considering the orientation
+        o, spath, inside = self.orientation(), set(self), set()
+        for p, q in pairwise(chain(self, [self[0]])):
+            n = (q - p) * 1j * o
+            inside |= {p + n, q + n} - spath
+
+        # Get all the inside points connected to the already found ones
+        q = deque(inside)
+        while q and (p := q.popleft()):
+            for d in D4:
+                if (np := p + d) not in inside and np not in spath:
+                    inside.add(np)
+                    q.append(np)
+
+        return inside
