@@ -78,19 +78,12 @@ def get_tuples(
 def get_unbound_2d_grid(
     filename: str = "input.txt",
     transformer: t.Callable[[str], t.Any] = lambda _: _,
-    filter: t.Callable[[t.Any], bool] = lambda _: True,
-) -> t.Dict[complex, t.Any]:
+    filter: t.Callable[[t.Any], bool] = lambda _: _ != ".",
+) -> Unbound2DGrid:
     """Get a 2D grid from the input file.
 
     The grid is not bound by a fixed size. The elements can be transformed by
     providing a transformer function, and filtered by providing a filter
     function.
     """
-    return Unbound2DGrid(
-        (
-            (complex(j, i), transformer(c))
-            for i, r in enumerate(get_lines(filename))
-            for j, c in enumerate(r)
-            if filter(c)
-        )
-    )
+    return Unbound2DGrid.from_group(get_lines(filename), transformer, filter)

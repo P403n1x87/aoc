@@ -134,6 +134,23 @@ class Unbound2DGrid(dict):
         """Find the first point with the given value."""
         return next(k for k, v in self.items() if v == value)
 
+    @classmethod
+    def from_group(
+        cls,
+        group: t.Iterable[t.Iterable[str]],
+        transformer: t.Callable[[str], t.Any] = lambda _: _,
+        filter: t.Callable[[t.Any], bool] = lambda _: True,
+    ) -> "Unbound2DGrid":
+        grid = cls(
+            (
+                (complex(j, i), transformer(c))
+                for i, r in enumerate(group)
+                for j, c in enumerate(r)
+                if filter(c)
+            )
+        )
+        return grid
+
 
 class Graph:
     def __init__(self, data):
