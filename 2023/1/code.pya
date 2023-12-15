@@ -1,0 +1,203 @@
+    resume                  0
+
+    load_const              0
+    load_const              None
+    import_name             $re
+    store_name              $re
+
+    load_const              0
+    load_const              (('get_lines',))
+    import_name             $aoctk.input
+    import_from             $get_lines
+    store_name              $get_lines
+    pop_top
+
+code solve(data, p, rp, lookup)
+    resume                  0
+
+    load_const              0
+    store_fast              $a
+
+    load_global             (True, "get_lines")
+    load_fast               $data
+    precall                 1
+    call                    1
+
+    get_iter
+accumulate:
+    for_iter                @accumulate_end
+    store_fast              $line
+
+    load_const              ""
+    store_fast              $ds
+
+    load_fast               $p
+    load_fast               $line
+    build_tuple             2
+    load_fast               $rp
+    load_fast               $line
+    load_const              None
+    load_const              None
+    load_const              -1
+    build_slice             3
+    binary_subscr
+    build_tuple             2
+    build_tuple             2
+    
+    get_iter
+digits:
+    for_iter                @digits_end
+    unpack_sequence         2
+    store_fast              $q
+    store_fast              $s
+
+    load_fast               $q
+    load_method             $search
+    load_fast               $s
+    precall                 1
+    call                    1
+    load_method             $group
+    load_const              0
+    precall                 1
+    call                    1
+    store_fast              $v
+
+    load_fast               $ds
+    load_fast               $lookup
+    load_method             $get
+    load_fast               $v
+    load_fast               $v
+    precall                 2
+    call                    2
+    binary_op               asm.BinaryOp.INPLACE_ADD
+    store_fast              $ds
+
+    jump_backward           @digits
+digits_end:
+
+    load_fast               $a
+    load_global             (True, "int")
+    load_fast               $ds
+    precall                 1
+    call                    1
+    binary_op               asm.BinaryOp.INPLACE_ADD
+    store_fast              $a
+
+    jump_backward           @accumulate
+accumulate_end:
+    
+    load_fast               $a
+    return_value
+end
+
+    load_const              .solve
+    make_function           0
+    store_name              $solve
+
+# ---- Part One ----
+
+    load_global             (True, "re")
+    load_attr               $compile
+    load_const              $\d
+    precall                 1
+    call                    1
+    store_fast              $PATTERN
+
+    load_global             (True, "solve")
+    load_const              "input.txt"
+    load_fast               $PATTERN
+    copy                    1
+    build_map               0
+    precall                 4
+    call                    4
+    store_fast              $result
+
+    load_global             (True, "print")
+    load_fast               $result
+    precall                 1
+    call                    1
+
+# ---- Part Two ----
+
+    load_const              "one|two|three|four|five|six|seven|eight|nine"
+    store_fast              $NS
+
+    build_map               0
+    store_fast              $LU
+
+    load_global             (True, "enumerate")
+    load_fast               $NS
+    load_method             $split
+    load_const              "|"
+    precall                 1
+    call                    1
+
+    load_const              1
+    precall                 1
+    call                    1
+
+    get_iter
+lookup:
+    for_iter                @lookup_end
+    unpack_sequence         2
+    store_fast              $v
+    store_fast              $n
+
+    load_global             (True, "str")
+    load_fast               $v
+    precall                 1
+    call                    1
+    load_fast               $LU
+    load_fast               $n
+    store_subscr
+
+    load_global             (True, "str")
+    load_fast               $v
+    precall                 1
+    call                    1
+    load_fast               $LU
+    load_fast               $n
+    load_const              None
+    load_const              None
+    load_const              -1
+    build_slice             3
+    binary_subscr
+    store_subscr
+
+    jump_backward           @lookup
+lookup_end:
+
+    load_global             (True, "solve")
+    load_const              "input.txt"
+    load_global             (True, "re")
+    load_attr               $compile
+    load_const              "\\d|"
+    load_fast               $NS
+    binary_op               asm.BinaryOp.ADD
+    precall                 1
+    call                    1
+    
+    load_global             (True, "re")
+    load_attr               $compile
+    load_const              "\\d|"
+    load_fast               $NS
+    load_const              None
+    load_const              None
+    load_const              -1
+    build_slice             3
+    binary_subscr
+    binary_op               asm.BinaryOp.ADD
+    precall                 1
+    call                    1
+
+    load_fast               $LU
+    precall                 4
+    call                    4
+    store_fast              $result
+
+    load_global             (True, "print")
+    load_fast               $result
+    precall                 1
+    call                    1
+
+    return_value
