@@ -151,6 +151,11 @@ class Unbound2DGrid(dict):
         )
         return grid
 
+    @classmethod
+    def within(cls, p: complex, bounds: t.Tuple[Range, Range]) -> bool:
+        bx, by = bounds
+        return p.real in bx and p.imag in by
+
 
 class Graph:
     def __init__(self, data):
