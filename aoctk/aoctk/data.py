@@ -4,6 +4,8 @@ from collections import deque
 from dataclasses import dataclass
 from itertools import chain, pairwise, product
 
+from aoctk.metric import manhattan2d as m2d
+
 D4 = tuple(1j**i for i in range(4))
 D8 = tuple(complex(i, j) for i in (-1, 0, 1) for j in (-1, 0, 1) if i or j)
 
@@ -315,3 +317,6 @@ class Path2D(list):
                     q.append(np)
 
         return inside
+
+    def __len__(self):
+        return sum(m2d(p, q) for p, q in pairwise(chain(self, [self[0]])))
