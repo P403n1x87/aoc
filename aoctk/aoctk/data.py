@@ -181,7 +181,7 @@ class Graph:
         raise NotImplementedError()
 
     def weight(self, n):
-        raise NotImplementedError()
+        return 1
 
     def dijkstra(self, start, end):
         seen, q = set(), [self.WeightedNode(0, start)]
@@ -195,7 +195,7 @@ class Graph:
                 continue
             seen.add(wn.node)
             for t in self.adj(wn.node):
-                heapq.heappush(q, self.WeightedNode(wn.weight + 1, t))
+                heapq.heappush(q, self.WeightedNode(wn.weight + self.weight(t), t))
 
         return float("inf")
 

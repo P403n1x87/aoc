@@ -1,7 +1,10 @@
-from functools import reduce
-from operator import mul
+from itertools import accumulate, repeat, takewhile
 
 
-def prod(iterable, start=1):
-    """Return the product of all elements in the iterable."""
-    return reduce(mul, iterable, start)
+def iterate(func, x):
+    """Iterate a function until it returns None."""
+    yield from accumulate(repeat(func), lambda a, f: f(a), initial=x)
+
+
+def iteratewhile(cond, func, x):
+    yield from takewhile(cond, iterate(func, x))
