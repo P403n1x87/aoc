@@ -114,6 +114,39 @@ for n, f in [(1, code.part_one), (2, code.part_two)]:
 }
 
 
+function submit {
+    part="${2}"
+    solution="${3}"
+    year="${4:-$(date +%Y)}"
+    day="${5:-$(date +%-d)}"
+
+    check_token
+
+    token=$(head -n 1 .token)
+
+    curl -s "https://adventofcode.com/${year}/day/${day}/answer" \
+        -H 'authority: adventofcode.com' \
+        -H 'accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7' \
+        -H 'accept-language: en-GB,en-US;q=0.9,en;q=0.8' \
+        -H 'cache-control: max-age=0' \
+        -H 'content-type: application/x-www-form-urlencoded' \
+        -H "cookie: session=${token}" \
+        -H 'origin: https://adventofcode.com' \
+        -H "referer: https://adventofcode.com/${year}/day/${day}" \
+        -H 'sec-ch-ua: "Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"' \
+        -H 'sec-ch-ua-mobile: ?0' \
+        -H 'sec-ch-ua-platform: "macOS"' \
+        -H 'sec-fetch-dest: document' \
+        -H 'sec-fetch-mode: navigate' \
+        -H 'sec-fetch-site: same-origin' \
+        -H 'sec-fetch-user: ?1' \
+        -H 'upgrade-insecure-requests: 1' \
+        -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36' \
+        --data-raw "level=${part}&answer=${solution}" \
+        --compressed | grep -q "That's the right answer!"
+}
+
+
 function main {
     cmd="$1"
 
@@ -129,6 +162,9 @@ function main {
             ;;
         run)
             run $@
+            ;;
+        submit)
+            submit $@
             ;;
         *)
             echo "Unknown command: $cmd"
