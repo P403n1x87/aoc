@@ -2,6 +2,7 @@ import heapq
 import typing as t
 from collections import deque
 from dataclasses import dataclass
+from functools import cached_property
 from itertools import chain, pairwise, product
 
 from aoctk.metric import manhattan2d as m2d
@@ -159,6 +160,23 @@ class Unbound2DGrid(dict):
         return p.real in bx and p.imag in by
 
 
+class Bounded2DGrid(Unbound2DGrid):
+    @cached_property
+    def size(self):
+        return super().size()
+
+    @cached_property
+    def bounds(self):
+        return super().bounds()
+
+    def within(self, p: complex) -> bool:
+        return super().within(p, self.bounds)
+
+    def wrap(self, p: complex) -> complex:
+        w, h = self.size
+        return complex(int(p.real) % w, int(p.imag) % h)
+
+
 class Graph:
     def __init__(self, data):
         self.data = data
@@ -194,8 +212,8 @@ class Graph:
             if wn.node in seen:
                 continue
             seen.add(wn.node)
-            for t in self.adj(wn.node):
-                heapq.heappush(q, self.WeightedNode(wn.weight + self.weight(t), t))
+            for a in self.adj(wn.node):
+                heapq.heappush(q, self.WeightedNode(wn.weight + self.weight(a), a))
 
         return float("inf")
 

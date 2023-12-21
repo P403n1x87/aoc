@@ -4,7 +4,7 @@ from itertools import islice
 from pathlib import Path
 from types import FrameType
 
-from aoctk.data import Unbound2DGrid
+from aoctk.data import Bounded2DGrid, Unbound2DGrid
 
 
 def get_path(filename: str = "input.txt") -> Path:
@@ -87,3 +87,17 @@ def get_unbound_2d_grid(
     function.
     """
     return Unbound2DGrid.from_group(get_lines(filename), transformer, filter)
+
+
+def get_bounded_2d_grid(
+    filename: str = "input.txt",
+    transformer: t.Callable[[str], t.Any] = lambda _: _,
+    filter: t.Callable[[t.Any], bool] = lambda _: _ != ".",
+) -> Bounded2DGrid:
+    """Get a 2D grid from the input file.
+
+    The grid is assumed to be bounded in size. The elements can be transformed
+    by providing a transformer function, and filtered by providing a filter
+    function.
+    """
+    return Bounded2DGrid.from_group(get_lines(filename), transformer, filter)

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<meta charset="utf-8"/>
+<title>Day 21 - Advent of Code 2023</title>
+<link rel="stylesheet" type="text/css" href="/static/style.css?31"/>
+<link rel="stylesheet alternate" type="text/css" href="/static/highcontrast.css?1" title="High Contrast"/>
+<link rel="shortcut icon" href="/favicon.png"/>
+<script>window.addEventListener('click', function(e,s,r){if(e.target.nodeName==='CODE'&&e.detail===3){s=window.getSelection();s.removeAllRanges();r=document.createRange();r.selectNodeContents(e.target);s.addRange(r);}});</script>
+</head><!--
+
+
+
+
+Oh, hello!  Funny seeing you here.
+
+I appreciate your enthusiasm, but you aren't going to find much down here.
+There certainly aren't clues to any of the puzzles.  The best surprises don't
+even appear in the source until you unlock them for real.
+
+Please be careful with automated requests; I'm not a massive company, and I can
+only take so much traffic.  Please be considerate so that everyone gets to play.
+
+If you're curious about how Advent of Code works, it's running on some custom
+Perl code. Other than a few integrations (auth, analytics, social media), I
+built the whole thing myself, including the design, animations, prose, and all
+of the puzzles.
+
+The puzzles are most of the work; preparing a new calendar and a new set of
+puzzles each year takes all of my free time for 4-5 months. A lot of effort
+went into building this thing - I hope you're enjoying playing it as much as I
+enjoyed making it for you!
+
+If you'd like to hang out, I'm @ericwastl@hachyderm.io on Mastodon and
+@ericwastl on Twitter.
+
+- Eric Wastl
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->
+<body>
+<header><div><h1 class="title-global"><a href="/">Advent of Code</a></h1><nav><ul><li><a href="/2023/about">[About]</a></li><li><a href="/2023/events">[Events]</a></li><li><a href="https://teespring.com/stores/advent-of-code" target="_blank">[Shop]</a></li><li><a href="/2023/settings">[Settings]</a></li><li><a href="/2023/auth/logout">[Log Out]</a></li></ul></nav><div class="user">P403n1x87 <a href="/2023/support" class="supporter-badge" title="Advent of Code Supporter">(AoC++)</a> <span class="star-count">41*</span></div></div><div><h1 class="title-event">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="title-event-wrap">y(</span><a href="/2023">2023</a><span class="title-event-wrap">)</span></h1><nav><ul><li><a href="/2023">[Calendar]</a></li><li><a href="/2023/support">[AoC++]</a></li><li><a href="/2023/sponsors">[Sponsors]</a></li><li><a href="/2023/leaderboard">[Leaderboard]</a></li><li><a href="/2023/stats">[Stats]</a></li></ul></nav></div></header>
+
+<div id="sidebar">
+<div id="sponsor"><div class="quiet">Our <a href="/2023/sponsors">sponsors</a> help make Advent of Code possible:</div><div class="sponsor"><a href="https://merge.berlin/" target="_blank" onclick="if(ga)ga('send','event','sponsor','sidebar',this.href);" rel="noopener">THE MERGE</a> - The Developer Experience Conference in Berlin, June 2024 (created by the co-founder of GitHub)</div></div>
+</div><!--/sidebar-->
+
+<main>
+<article class="day-desc"><h2>--- Day 21: Step Counter ---</h2><p>You manage to catch the <a href="7">airship</a> right as it's dropping someone else off on their all-expenses-paid trip to Desert Island! It even helpfully drops you off near the <a href="5">gardener</a> and his massive farm.</p>
+<p>"You got the sand flowing again! Great work! Now we just need to wait until we have enough sand to filter the water for Snow Island and we'll have snow again in no time."</p>
+<p>While you wait, one of the Elves that works with the gardener heard how good you are at solving problems and would like your help. He needs to get his <a href="https://en.wikipedia.org/wiki/Pedometer" target="_blank">steps</a> in for the day, and so he'd like to know <em>which garden plots he can reach with exactly his remaining <code>64</code> steps</em>.</p>
+<p>He gives you an up-to-date map (your puzzle input) of his starting position (<code>S</code>), garden plots (<code>.</code>), and rocks (<code>#</code>). For example:</p>
+<pre><code>...........
+.....###.#.
+.###.##..#.
+..#.#...#..
+....#.#....
+.##..S####.
+.##..#...#.
+.......##..
+.##.#.####.
+.##..##.##.
+...........
+</code></pre>
+<p>The Elf starts at the starting position (<code>S</code>) which also counts as a garden plot. Then, he can take one step north, south, east, or west, but only onto tiles that are garden plots. This would allow him to reach any of the tiles marked <code>O</code>:</p>
+<pre><code>...........
+.....###.#.
+.###.##..#.
+..#.#...#..
+....#O#....
+.##.OS####.
+.##..#...#.
+.......##..
+.##.#.####.
+.##..##.##.
+...........
+</code></pre>
+<p>Then, he takes a second step. Since at this point he could be at <em>either</em> tile marked <code>O</code>, his second step would allow him to reach any garden plot that is one step north, south, east, or west of <em>any</em> tile that he could have reached after the first step:</p>
+<pre><code>...........
+.....###.#.
+.###.##..#.
+..#.#O..#..
+....#.#....
+.##O.O####.
+.##.O#...#.
+.......##..
+.##.#.####.
+.##..##.##.
+...........
+</code></pre>
+<p>After two steps, he could be at any of the tiles marked <code>O</code> above, including the starting position (either by going north-then-south or by going west-then-east).</p>
+<p>A single third step leads to even more possibilities:</p>
+<pre><code>...........
+.....###.#.
+.###.##..#.
+..#.#.O.#..
+...O#O#....
+.##.OS####.
+.##O.#...#.
+....O..##..
+.##.#.####.
+.##..##.##.
+...........
+</code></pre>
+<p>He will continue like this until his steps for the day have been exhausted. After a total of <code>6</code> steps, he could reach any of the garden plots marked <code>O</code>:</p>
+<pre><code>...........
+.....###.#.
+.###.##.O#.
+.O#O#O.O#..
+O.O.#.#.O..
+.##O.O####.
+.##.O#O..#.
+.O.O.O.##..
+.##.#.####.
+.##O.##.##.
+...........
+</code></pre>
+<p>In this example, if the Elf's goal was to get exactly <code>6</code> more steps today, he could use them to reach any of <code><em>16</em></code> garden plots.</p>
+<p>However, the Elf <em>actually needs to get <code>64</code> steps today</em>, and the map he's handed you is much larger than the example map.</p>
+<p>Starting from the garden plot marked <code>S</code> on your map, <em>how many garden plots could the Elf reach in exactly <code>64</code> steps?</em></p>
+</article>
+<p>Your puzzle answer was <code>3782</code>.</p><p class="day-success">The first half of this puzzle is complete! It provides one gold star: *</p>
+<article class="day-desc"><h2 id="part2">--- Part Two ---</h2><p>The Elf seems confused by your answer until he realizes his mistake: he was reading from a <span title="Next up: 729.">list</span> of his favorite numbers that are both perfect squares and perfect cubes, not his step counter.</p>
+<p>The <em>actual</em> number of steps he needs to get today is exactly <code><em>26501365</em></code>.</p>
+<p>He also points out that the garden plots and rocks are set up so that the map <em>repeats infinitely</em> in every direction.</p>
+<p>So, if you were to look one additional map-width or map-height out from the edge of the example map above, you would find that it keeps repeating:</p>
+<pre><code>.................................
+.....###.#......###.#......###.#.
+.###.##..#..###.##..#..###.##..#.
+..#.#...#....#.#...#....#.#...#..
+....#.#........#.#........#.#....
+.##...####..##...####..##...####.
+.##..#...#..##..#...#..##..#...#.
+.......##.........##.........##..
+.##.#.####..##.#.####..##.#.####.
+.##..##.##..##..##.##..##..##.##.
+.................................
+.................................
+.....###.#......###.#......###.#.
+.###.##..#..###.##..#..###.##..#.
+..#.#...#....#.#...#....#.#...#..
+....#.#........#.#........#.#....
+.##...####..##..S####..##...####.
+.##..#...#..##..#...#..##..#...#.
+.......##.........##.........##..
+.##.#.####..##.#.####..##.#.####.
+.##..##.##..##..##.##..##..##.##.
+.................................
+.................................
+.....###.#......###.#......###.#.
+.###.##..#..###.##..#..###.##..#.
+..#.#...#....#.#...#....#.#...#..
+....#.#........#.#........#.#....
+.##...####..##...####..##...####.
+.##..#...#..##..#...#..##..#...#.
+.......##.........##.........##..
+.##.#.####..##.#.####..##.#.####.
+.##..##.##..##..##.##..##..##.##.
+.................................
+</code></pre>
+<p>This is just a tiny three-map-by-three-map slice of the inexplicably-infinite farm layout; garden plots and rocks repeat as far as you can see. The Elf still starts on the one middle tile marked <code>S</code>, though - every other repeated <code>S</code> is replaced with a normal garden plot (<code>.</code>).</p>
+<p>Here are the number of reachable garden plots in this new infinite version of the example map for different numbers of steps:</p>
+<ul>
+<li>In exactly <code>6</code> steps, he can still reach <code><em>16</em></code> garden plots.</li>
+<li>In exactly <code>10</code> steps, he can reach any of <code><em>50</em></code> garden plots.</li>
+<li>In exactly <code>50</code> steps, he can reach <code><em>1594</em></code> garden plots.</li>
+<li>In exactly <code>100</code> steps, he can reach <code><em>6536</em></code> garden plots.</li>
+<li>In exactly <code>500</code> steps, he can reach <code><em>167004</em></code> garden plots.</li>
+<li>In exactly <code>1000</code> steps, he can reach <code><em>668697</em></code> garden plots.</li>
+<li>In exactly <code>5000</code> steps, he can reach <code><em>16733044</em></code> garden plots.</li>
+</ul>
+<p>However, the step count the Elf needs is much larger! Starting from the garden plot marked <code>S</code> on your infinite map, <em>how many garden plots could the Elf reach in exactly <code>26501365</code> steps?</em></p>
+</article>
+<form method="post" action="21/answer"><input type="hidden" name="level" value="2"/><p>Answer: <input type="text" name="answer" autocomplete="off"/> <input type="submit" value="[Submit]"/></p></form>
+<p>Although it hasn't changed, you can still <a href="21/input" target="_blank">get your puzzle input</a>.</p>
+<p>You can also <span class="share">[Share<span class="share-content">on
+  <a href="https://twitter.com/intent/tweet?text=I%27ve+completed+Part+One+of+%22Step+Counter%22+%2D+Day+21+%2D+Advent+of+Code+2023&amp;url=https%3A%2F%2Fadventofcode%2Ecom%2F2023%2Fday%2F21&amp;related=ericwastl&amp;hashtags=AdventOfCode" target="_blank">Twitter</a>
+  <a href="javascript:void(0);" onclick="var ms; try{ms=localStorage.getItem('mastodon.server')}finally{} if(typeof ms!=='string')ms=''; ms=prompt('Mastodon Server?',ms); if(typeof ms==='string' && ms.length){this.href='https://'+ms+'/share?text=I%27ve+completed+Part+One+of+%22Step+Counter%22+%2D+Day+21+%2D+Advent+of+Code+2023+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2023%2Fday%2F21';try{localStorage.setItem('mastodon.server',ms);}finally{}}else{return false;}" target="_blank">Mastodon</a
+></span>]</span> this puzzle.</p>
+</main>
+
+<!-- ga -->
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-69522494-1', 'auto');
+ga('set', 'anonymizeIp', true);
+ga('send', 'pageview');
+</script>
+<!-- /ga -->
+</body>
+</html>
