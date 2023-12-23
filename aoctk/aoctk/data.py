@@ -198,7 +198,7 @@ class Graph:
     def adj(self, n):
         raise NotImplementedError()
 
-    def weight(self, n):
+    def weight(self, n, m=None):
         return 1
 
     def dijkstra(self, start, end):
@@ -216,6 +216,17 @@ class Graph:
                 heapq.heappush(q, self.WeightedNode(wn.weight + self.weight(a), a))
 
         return float("inf")
+
+    def longest(self, start, end):
+        seen, q = {}, deque([self.WeightedNode(0, start)])
+        while q:
+            wn = q.popleft()
+            if wn.weight > seen.setdefault(wn.node, wn.weight):
+                seen[wn.node] = wn.weight
+            for a in self.adj(wn.node):
+                q.append(self.WeightedNode(wn.weight + self.weight(a, wn.node), a))
+
+        return seen[end]
 
     def brachistochrone(self, start, end, heuristic=lambda n, e: 0):
         """Return the minimum time to travel from start to end.
