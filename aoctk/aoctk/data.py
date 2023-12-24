@@ -255,6 +255,9 @@ class Vector:
     def __init__(self, *args):
         self._c = args
 
+    def __abs__(self):
+        return sum(_**2 for _ in self._c) ** 0.5
+
     def __add__(self, other):
         return Vector(*(a + b for a, b in zip(self._c, other._c)))
 
@@ -295,6 +298,24 @@ class Vector:
 
     def __repr__(self) -> str:
         return f"Vector{self._c}"
+
+    def __len__(self) -> int:
+        return len(self._c)
+
+    def __matmul__(self, other) -> float:
+        return sum(a * b for a, b in zip(self._c, other._c))
+
+    def round(self, n: int = 0) -> "Vector":
+        return Vector(*(round(_, n) for _ in self._c))
+
+    def x(self, other):
+        """Cross product of two vectors. Only defined for 3D vectors."""
+        assert len(self) == len(other) == 3
+        return Vector(
+            self[1] * other[2] - self[2] * other[1],
+            self[2] * other[0] - self[0] * other[2],
+            self[0] * other[1] - self[1] * other[0],
+        )
 
 
 class bij(dict):
