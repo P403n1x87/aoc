@@ -153,6 +153,17 @@ function submit {
 }
 
 
+function update {
+    year="${2:-$(date +%Y)}"
+    day="${3:-$(date +%-d)}"
+
+    # Check that we have a token
+    check_token
+
+    python convert.py ${year} ${day}
+}
+
+
 function main {
     cmd="$1"
 
@@ -170,6 +181,9 @@ function main {
             run $@
             ;;
         submit)
+            submit $@
+            ;;
+        update)
             submit $@
             ;;
         *)

@@ -87,14 +87,14 @@ If you'd like to hang out, I'm @ericwastl@hachyderm.io on Mastodon and
 
 -->
 <body>
-<header><div><h1 class="title-global"><a href="/">Advent of Code</a></h1><nav><ul><li><a href="/2023/about">[About]</a></li><li><a href="/2023/events">[Events]</a></li><li><a href="https://teespring.com/stores/advent-of-code" target="_blank">[Shop]</a></li><li><a href="/2023/settings">[Settings]</a></li><li><a href="/2023/auth/logout">[Log Out]</a></li></ul></nav><div class="user">P403n1x87 <span class="star-count">25*</span></div></div><div><h1 class="title-event">&nbsp;&nbsp;&nbsp;<span class="title-event-wrap">0xffff&amp;</span><a href="/2023">2023</a><span class="title-event-wrap"></span></h1><nav><ul><li><a href="/2023">[Calendar]</a></li><li><a href="/2023/support">[AoC++]</a></li><li><a href="/2023/sponsors">[Sponsors]</a></li><li><a href="/2023/leaderboard">[Leaderboard]</a></li><li><a href="/2023/stats">[Stats]</a></li></ul></nav></div></header>
+<header><div><h1 class="title-global"><a href="/">Advent of Code</a></h1><nav><ul><li><a href="/2023/about">[About]</a></li><li><a href="/2023/events">[Events]</a></li><li><a href="https://teespring.com/stores/advent-of-code" target="_blank">[Shop]</a></li><li><a href="/2023/settings">[Settings]</a></li><li><a href="/2023/auth/logout">[Log Out]</a></li></ul></nav><div class="user">P403n1x87 <a href="/2023/support" class="supporter-badge" title="Advent of Code Supporter">(AoC++)</a> <span class="star-count">50*</span></div></div><div><h1 class="title-event">&nbsp;&nbsp;<span class="title-event-wrap">0.0.0.0:</span><a href="/2023">2023</a><span class="title-event-wrap"></span></h1><nav><ul><li><a href="/2023">[Calendar]</a></li><li><a href="/2023/support">[AoC++]</a></li><li><a href="/2023/sponsors">[Sponsors]</a></li><li><a href="/2023/leaderboard">[Leaderboard]</a></li><li><a href="/2023/stats">[Stats]</a></li></ul></nav></div></header>
 
 <div id="sidebar">
-<div id="sponsor"><div class="quiet">Our <a href="/2023/sponsors">sponsors</a> help make Advent of Code possible:</div><div class="sponsor"><a href="https://medium.com/criteo-engineering" target="_blank" onclick="if(ga)ga('send','event','sponsor','sidebar',this.href);" rel="noopener">Criteo</a> - Helping Santa prepare for the peak season since 2005</div></div>
+<div id="sponsor"><div class="quiet">Our <a href="/2023/sponsors">sponsors</a> help make Advent of Code possible:</div><div class="sponsor"><a href="https://www.honeycomb.io/product-overview" target="_blank" onclick="if(ga)ga('send','event','sponsor','sidebar',this.href);" rel="noopener">Honeycomb</a> - On call for the holidays? Honeycomb adopters are happier and less burned out because we make your complex systems easy to understand.</div></div>
 </div><!--/sidebar-->
 
 <main>
-<article class="day-desc"><h2>--- Day 13: Point of Incidence ---</h2><p>With your help, the hot springs team locates an appropriate spring which launches you neatly and precisely up to the edge of <em>Lava Island</em>.</p>
+<style>article *[title]{border-bottom:1px dotted #ffff66;}</style><article class="day-desc"><h2>--- Day 13: Point of Incidence ---</h2><p>With your help, the hot springs team locates an appropriate spring which launches you neatly and precisely up to the edge of <em>Lava Island</em>.</p>
 <p>There's just one problem: you don't see any <em>lava</em>.</p>
 <p>You <em>do</em> see a lot of ash and igneous rock; there are even what look like gray mountains scattered around. After a while, you make your way to a nearby cluster of mountains only to discover that the valley between them is completely full of large <em>mirrors</em>.  Most of the mirrors seem to be aligned in a consistent way; perhaps you should head in that direction?</p>
 <p>As you move through the valley of mirrors, you find that several of them have fallen from the large metal frames keeping them in place. The mirrors are extremely flat and shiny, and many of the fallen mirrors have lodged into the ash at strange angles. Because the terrain is all one color, it's hard to tell where it's safe to walk or where you're about to run into a mirror.</p>
@@ -144,8 +144,7 @@ If you'd like to hang out, I'm @ericwastl@hachyderm.io on Mastodon and
 <p>To <em>summarize</em> your pattern notes, add up <em>the number of columns</em> to the left of each vertical line of reflection; to that, also add <em>100 multiplied by the number of rows</em> above each horizontal line of reflection. In the above example, the first pattern's vertical line has <code>5</code> columns to its left and the second pattern's horizontal line has <code>4</code> rows above it, a total of <code><em>405</em></code>.</p>
 <p>Find the line of reflection in each of the patterns in your notes. <em>What number do you get after summarizing all of your notes?</em></p>
 </article>
-<p>Your puzzle answer was <code>35538</code>.</p><p class="day-success">The first half of this puzzle is complete! It provides one gold star: *</p>
-<article class="day-desc"><h2 id="part2">--- Part Two ---</h2><p>You resume walking through the valley of mirrors and - <em>SMACK!</em> - run directly into one. Hopefully <span title="Sorry, Nobody saw that.">nobody</span> was watching, because that must have been pretty embarrassing.</p>
+<p>Your puzzle answer was <code>35538</code>.</p><article class="day-desc"><h2 id="part2">--- Part Two ---</h2><p>You resume walking through the valley of mirrors and - <em>SMACK!</em> - run directly into one. Hopefully <span title="Sorry, Nobody saw that.">nobody</span> was watching, because that must have been pretty embarrassing.</p>
 <p>Upon closer inspection, you discover that every mirror has exactly one <em>smudge</em>: exactly one <code>.</code> or <code>#</code> should be the opposite type.</p>
 <p>In each pattern, you'll need to locate and fix the smudge that causes a <em>different reflection line</em> to be valid. (The old reflection line won't necessarily continue being valid after the smudge is fixed.)</p>
 <p>Here's the above example again:</p>
@@ -188,11 +187,12 @@ If you'd like to hang out, I'm @ericwastl@hachyderm.io on Mastodon and
 <p>Summarize your notes as before, but instead use the new different reflection lines. In this example, the first pattern's new horizontal line has 3 rows above it and the second pattern's new horizontal line has 1 row above it, summarizing to the value <code><em>400</em></code>.</p>
 <p>In each pattern, fix the smudge and find the different line of reflection. <em>What number do you get after summarizing the new reflection line in each pattern in your notes?</em></p>
 </article>
-<form method="post" action="13/answer"><input type="hidden" name="level" value="2"/><p>Answer: <input type="text" name="answer" autocomplete="off"/> <input type="submit" value="[Submit]"/></p></form>
-<p>Although it hasn't changed, you can still <a href="13/input" target="_blank">get your puzzle input</a>.</p>
+<p>Your puzzle answer was <code>30442</code>.</p><p class="day-success">Both parts of this puzzle are complete! They provide two gold stars: **</p>
+<p>At this point, all that is left is for you to <a href="/2023">admire your Advent calendar</a>.</p>
+<p>If you still want to see it, you can <a href="13/input" target="_blank">get your puzzle input</a>.</p>
 <p>You can also <span class="share">[Share<span class="share-content">on
-  <a href="https://twitter.com/intent/tweet?text=I%27ve+completed+Part+One+of+%22Point+of+Incidence%22+%2D+Day+13+%2D+Advent+of+Code+2023&amp;url=https%3A%2F%2Fadventofcode%2Ecom%2F2023%2Fday%2F13&amp;related=ericwastl&amp;hashtags=AdventOfCode" target="_blank">Twitter</a>
-  <a href="javascript:void(0);" onclick="var ms; try{ms=localStorage.getItem('mastodon.server')}finally{} if(typeof ms!=='string')ms=''; ms=prompt('Mastodon Server?',ms); if(typeof ms==='string' && ms.length){this.href='https://'+ms+'/share?text=I%27ve+completed+Part+One+of+%22Point+of+Incidence%22+%2D+Day+13+%2D+Advent+of+Code+2023+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2023%2Fday%2F13';try{localStorage.setItem('mastodon.server',ms);}finally{}}else{return false;}" target="_blank">Mastodon</a
+  <a href="https://twitter.com/intent/tweet?text=I%27ve+completed+%22Point+of+Incidence%22+%2D+Day+13+%2D+Advent+of+Code+2023&amp;url=https%3A%2F%2Fadventofcode%2Ecom%2F2023%2Fday%2F13&amp;related=ericwastl&amp;hashtags=AdventOfCode" target="_blank">Twitter</a>
+  <a href="javascript:void(0);" onclick="var ms; try{ms=localStorage.getItem('mastodon.server')}finally{} if(typeof ms!=='string')ms=''; ms=prompt('Mastodon Server?',ms); if(typeof ms==='string' && ms.length){this.href='https://'+ms+'/share?text=I%27ve+completed+%22Point+of+Incidence%22+%2D+Day+13+%2D+Advent+of+Code+2023+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2023%2Fday%2F13';try{localStorage.setItem('mastodon.server',ms);}finally{}}else{return false;}" target="_blank">Mastodon</a
 ></span>]</span> this puzzle.</p>
 </main>
 

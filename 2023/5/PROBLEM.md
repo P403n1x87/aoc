@@ -165,7 +165,8 @@ first value is the **start** of the range and the second value is the **length**
 of the range. So, in the first line of the example above:
 
 ```
-seeds: 79 14 55 13```
+seeds: 79 14 55 13
+```
 
 This line describes two ranges of seed numbers to be planted in the garden. The
 first range starts with seed number `79` and contains `14` values: `79`, `80`,

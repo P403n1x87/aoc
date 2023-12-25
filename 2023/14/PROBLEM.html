@@ -87,14 +87,14 @@ If you'd like to hang out, I'm @ericwastl@hachyderm.io on Mastodon and
 
 -->
 <body>
-<header><div><h1 class="title-global"><a href="/">Advent of Code</a></h1><nav><ul><li><a href="/2023/about">[About]</a></li><li><a href="/2023/events">[Events]</a></li><li><a href="https://teespring.com/stores/advent-of-code" target="_blank">[Shop]</a></li><li><a href="/2023/settings">[Settings]</a></li><li><a href="/2023/auth/logout">[Log Out]</a></li></ul></nav><div class="user">P403n1x87 <span class="star-count">27*</span></div></div><div><h1 class="title-event">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="title-event-wrap">y(</span><a href="/2023">2023</a><span class="title-event-wrap">)</span></h1><nav><ul><li><a href="/2023">[Calendar]</a></li><li><a href="/2023/support">[AoC++]</a></li><li><a href="/2023/sponsors">[Sponsors]</a></li><li><a href="/2023/leaderboard">[Leaderboard]</a></li><li><a href="/2023/stats">[Stats]</a></li></ul></nav></div></header>
+<header><div><h1 class="title-global"><a href="/">Advent of Code</a></h1><nav><ul><li><a href="/2023/about">[About]</a></li><li><a href="/2023/events">[Events]</a></li><li><a href="https://teespring.com/stores/advent-of-code" target="_blank">[Shop]</a></li><li><a href="/2023/settings">[Settings]</a></li><li><a href="/2023/auth/logout">[Log Out]</a></li></ul></nav><div class="user">P403n1x87 <a href="/2023/support" class="supporter-badge" title="Advent of Code Supporter">(AoC++)</a> <span class="star-count">50*</span></div></div><div><h1 class="title-event">&nbsp;<span class="title-event-wrap">{&apos;year&apos;:</span><a href="/2023">2023</a><span class="title-event-wrap">}</span></h1><nav><ul><li><a href="/2023">[Calendar]</a></li><li><a href="/2023/support">[AoC++]</a></li><li><a href="/2023/sponsors">[Sponsors]</a></li><li><a href="/2023/leaderboard">[Leaderboard]</a></li><li><a href="/2023/stats">[Stats]</a></li></ul></nav></div></header>
 
 <div id="sidebar">
-<div id="sponsor"><div class="quiet">Our <a href="/2023/sponsors">sponsors</a> help make Advent of Code possible:</div><div class="sponsor"><a href="https://engineering.atspotify.com/" target="_blank" onclick="if(ga)ga('send','event','sponsor','sidebar',this.href);" rel="noopener">Spotify</a> - Follow our engineering blog to see how our developers solve complex tech problems, at scale, every day.</div></div>
+<div id="sponsor"><div class="quiet">Our <a href="/2023/sponsors">sponsors</a> help make Advent of Code possible:</div><div class="sponsor"><a href="https://www.splunk.com/en_us/careers.html" target="_blank" onclick="if(ga)ga('send','event','sponsor','sidebar',this.href);" rel="noopener">Splunk</a> - Come build a more resilient digital world with us.</div></div>
 </div><!--/sidebar-->
 
 <main>
-<article class="day-desc"><h2>--- Day 14: Parabolic Reflector Dish ---</h2><p>You reach the place where all of the mirrors were pointing: a massive <a href="https://en.wikipedia.org/wiki/Parabolic_reflector" target="_blank">parabolic reflector dish</a> <span title="Why, where do you attach YOUR massive parabolic reflector dishes?">attached</span> to the side of another large mountain.</p>
+<style>article *[title]{border-bottom:1px dotted #ffff66;}</style><article class="day-desc"><h2>--- Day 14: Parabolic Reflector Dish ---</h2><p>You reach the place where all of the mirrors were pointing: a massive <a href="https://en.wikipedia.org/wiki/Parabolic_reflector" target="_blank">parabolic reflector dish</a> <span title="Why, where do you attach YOUR massive parabolic reflector dishes?">attached</span> to the side of another large mountain.</p>
 <p>The dish is made up of many small mirrors, but while the mirrors themselves are roughly in the shape of a parabolic reflector dish, each individual mirror seems to be pointing in slightly the wrong direction. If the dish is meant to focus light, all it's doing right now is sending it in a vague direction.</p>
 <p>This system must be what provides the energy for the lava! If you focus the reflector dish, maybe you can go where it's pointing and use the light to fix the lava production.</p>
 <p>Upon closer inspection, the individual mirrors each appear to be connected via an elaborate system of ropes and pulleys to a large metal platform below the dish. The platform is covered in large rocks of various shapes. Depending on their position, the weight of the rocks deforms the platform, and the shape of the platform controls which ropes move and ultimately the focus of the dish.</p>
@@ -138,8 +138,7 @@ O..#.OO...  7
 <p>The total load is the sum of the load caused by all of the <em>rounded rocks</em>. In this example, the total load is <code><em>136</em></code>.</p>
 <p>Tilt the platform so that the rounded rocks all roll north. Afterward, <em>what is the total load on the north support beams?</em></p>
 </article>
-<p>Your puzzle answer was <code>106997</code>.</p><p class="day-success">The first half of this puzzle is complete! It provides one gold star: *</p>
-<article class="day-desc"><h2 id="part2">--- Part Two ---</h2><p>The parabolic reflector dish deforms, but not in a way that focuses the beam. To do that, you'll need to move the rocks to the edges of the platform. Fortunately, a button on the side of the control panel labeled "<em>spin cycle</em>" attempts to do just that!</p>
+<p>Your puzzle answer was <code>106997</code>.</p><article class="day-desc"><h2 id="part2">--- Part Two ---</h2><p>The parabolic reflector dish deforms, but not in a way that focuses the beam. To do that, you'll need to move the rocks to the edges of the platform. Fortunately, a button on the side of the control panel labeled "<em>spin cycle</em>" attempts to do just that!</p>
 <p>Each <em>cycle</em> tilts the platform four times so that the rounded rocks roll <em>north</em>, then <em>west</em>, then <em>south</em>, then <em>east</em>. After each tilt, the rounded rocks roll as far as they can before the platform tilts in the next direction. After one cycle, the platform will have finished rolling the rounded rocks in those four directions in that order.</p>
 <p>Here's what happens in the example above after each of the first few cycles:</p>
 <pre><code>After 1 cycle:
@@ -182,11 +181,12 @@ After 3 cycles:
 <p>In the above example, after <code>1000000000</code> cycles, the total load on the north support beams is <code><em>64</em></code>.</p>
 <p>Run the spin cycle for <code>1000000000</code> cycles. Afterward, <em>what is the total load on the north support beams?</em></p>
 </article>
-<form method="post" action="14/answer"><input type="hidden" name="level" value="2"/><p>Answer: <input type="text" name="answer" autocomplete="off"/> <input type="submit" value="[Submit]"/></p></form>
-<p>Although it hasn't changed, you can still <a href="14/input" target="_blank">get your puzzle input</a>.</p>
+<p>Your puzzle answer was <code>99641</code>.</p><p class="day-success">Both parts of this puzzle are complete! They provide two gold stars: **</p>
+<p>At this point, all that is left is for you to <a href="/2023">admire your Advent calendar</a>.</p>
+<p>If you still want to see it, you can <a href="14/input" target="_blank">get your puzzle input</a>.</p>
 <p>You can also <span class="share">[Share<span class="share-content">on
-  <a href="https://twitter.com/intent/tweet?text=I%27ve+completed+Part+One+of+%22Parabolic+Reflector+Dish%22+%2D+Day+14+%2D+Advent+of+Code+2023&amp;url=https%3A%2F%2Fadventofcode%2Ecom%2F2023%2Fday%2F14&amp;related=ericwastl&amp;hashtags=AdventOfCode" target="_blank">Twitter</a>
-  <a href="javascript:void(0);" onclick="var ms; try{ms=localStorage.getItem('mastodon.server')}finally{} if(typeof ms!=='string')ms=''; ms=prompt('Mastodon Server?',ms); if(typeof ms==='string' && ms.length){this.href='https://'+ms+'/share?text=I%27ve+completed+Part+One+of+%22Parabolic+Reflector+Dish%22+%2D+Day+14+%2D+Advent+of+Code+2023+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2023%2Fday%2F14';try{localStorage.setItem('mastodon.server',ms);}finally{}}else{return false;}" target="_blank">Mastodon</a
+  <a href="https://twitter.com/intent/tweet?text=I%27ve+completed+%22Parabolic+Reflector+Dish%22+%2D+Day+14+%2D+Advent+of+Code+2023&amp;url=https%3A%2F%2Fadventofcode%2Ecom%2F2023%2Fday%2F14&amp;related=ericwastl&amp;hashtags=AdventOfCode" target="_blank">Twitter</a>
+  <a href="javascript:void(0);" onclick="var ms; try{ms=localStorage.getItem('mastodon.server')}finally{} if(typeof ms!=='string')ms=''; ms=prompt('Mastodon Server?',ms); if(typeof ms==='string' && ms.length){this.href='https://'+ms+'/share?text=I%27ve+completed+%22Parabolic+Reflector+Dish%22+%2D+Day+14+%2D+Advent+of+Code+2023+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2023%2Fday%2F14';try{localStorage.setItem('mastodon.server',ms);}finally{}}else{return false;}" target="_blank">Mastodon</a
 ></span>]</span> this puzzle.</p>
 </main>
 

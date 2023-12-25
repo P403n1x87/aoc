@@ -17,9 +17,9 @@ what seems to be a pile of colorful square cards.
 ask about water sources.
 
 "I'm not sure; I just operate the gondola lift. That does sound like something
-we'd have, though - this is **None**, after all! I bet the **gardener** would
-know. He's on a different island, though - er, the small kind surrounded by
-water, not the floating kind. We really need to come up with a better naming
+we'd have, though - this is **Island Island**, after all! I bet the **gardener**
+would know. He's on a different island, though - er, the small kind surrounded
+by water, not the floating kind. We really need to come up with a better naming
 scheme. Tell you what: if you can help me with something quick, I'll let you
 **borrow my boat** and you can go visit the gardener. I got all these
 [scratchcards](https://en.wikipedia.org/wiki/Scratchcard) as a gift, but I can't
