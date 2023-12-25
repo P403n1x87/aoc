@@ -74,17 +74,19 @@ def part_one(data=\"input.txt\"):
 
 
 def part_two(data=\"input.txt\"):
-    pass\
+    pass
 
 
 def test():
-    assert part_one(\"test.txt\") is None
-    assert part_two(\"test.txt\") is None\
+    assert (_ := part_one(\"test.txt\")) is None, _
+    assert (_ := part_two(\"test.txt\")) is None, _\
 " > $dest/code.py
 
     curl -s -H "Cookie: session=${token}" $challenge/input > $dest/input.txt
 
     touch $dest/test.txt
+
+    python convert.py ${year} ${day}
 }
 
 
@@ -143,7 +145,11 @@ function submit {
         -H 'upgrade-insecure-requests: 1' \
         -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36' \
         --data-raw "level=${part}&answer=${solution}" \
-        --compressed | grep -q "That's the right answer!"
+        --compressed \
+        | xmllint --quiet --html --xpath "//body/main/article/descendant::*/text()" - 2> /dev/null \
+        | tr '\n' ' ' \
+        | tr -s ' ' \
+        | fold -sw 80
 }
 
 
