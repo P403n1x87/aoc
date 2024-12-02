@@ -184,7 +184,7 @@ function main {
             submit $@
             ;;
         update)
-            submit $@
+            update $@
             ;;
         *)
             echo "Unknown command: $cmd"
