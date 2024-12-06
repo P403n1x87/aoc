@@ -55,17 +55,14 @@ def part_two(data="input.txt"):
     return sum(
         int(_[len(_) >> 1])
         for _ in (
-            sorted(_, key=Page)
-            for _ in (
-                ps
-                for ps in (_.split(",") for _ in pages)
-                if not all(
-                    not s or p not in sr or not sr[p] & s
-                    for p, ss in {
-                        p: (set(ps[:i]), set(ps[i + 1 :])) for i, p in enumerate(ps)
-                    }.items()
-                    for s, sr in zip(ss, (rr, lr))
-                )
+            sorted(ps, key=Page)
+            for ps in (_.split(",") for _ in pages)
+            if not all(
+                not s or p not in sr or not sr[p] & s
+                for p, ss in {
+                    p: (set(ps[:i]), set(ps[i + 1 :])) for i, p in enumerate(ps)
+                }.items()
+                for s, sr in zip(ss, (rr, lr))
             )
         )
     )
