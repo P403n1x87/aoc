@@ -144,14 +144,16 @@ class Unbound2DGrid(dict):
         transformer: t.Callable[[str], t.Any] = lambda _: _,
         filter: t.Callable[[t.Any], bool] = lambda _: True,
     ) -> "Unbound2DGrid":
+        rows = list(group)
         grid = cls(
             (
                 (complex(j, i), transformer(c))
-                for i, r in enumerate(group)
+                for i, r in enumerate(rows)
                 for j, c in enumerate(r)
                 if filter(c)
             )
         )
+        grid.bounds = (Range(0, len(rows[0]) - 1), Range(0, len(rows) - 1))
         return grid
 
     @classmethod
@@ -175,6 +177,13 @@ class Bounded2DGrid(Unbound2DGrid):
     def wrap(self, p: complex) -> complex:
         w, h = self.size
         return complex(int(p.real) % w, int(p.imag) % h)
+
+    def print(self, reverse=False):
+        xr, yr = self.bounds
+        for y in range(yr.hi, yr.lo - 1, -1) if reverse else range(yr.lo, yr.hi + 1):
+            for x in range(xr.lo, xr.hi + 1):
+                print(self.get(x + y * 1j, " "), end="")
+            print()
 
 
 class Graph:
