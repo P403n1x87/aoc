@@ -13,6 +13,10 @@ D8 = tuple(complex(i, j) for i in (-1, 0, 1) for j in (-1, 0, 1) if i or j)
 M4 = {">": 1, "<": -1, "v": 1j, "^": -1j}
 
 
+def wrap(p: complex, w: int, h: int) -> complex:
+    return complex(int(p.real) % w, int(p.imag) % h)
+
+
 @dataclass
 class Range:
     lo: int
@@ -175,8 +179,7 @@ class Bounded2DGrid(Unbound2DGrid):
         return super().within(p, self.bounds)
 
     def wrap(self, p: complex) -> complex:
-        w, h = self.size
-        return complex(int(p.real) % w, int(p.imag) % h)
+        return wrap(p, *self.size)
 
     def print(self, reverse=False):
         xr, yr = self.bounds
