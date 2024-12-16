@@ -1,6 +1,6 @@
 import heapq
 import typing as t
-from collections import deque
+from collections import defaultdict, deque
 from dataclasses import dataclass
 from functools import cached_property
 from itertools import chain, pairwise, product
@@ -146,7 +146,7 @@ class Unbound2DGrid(dict):
         cls,
         group: t.Iterable[t.Iterable[str]],
         transformer: t.Callable[[str], t.Any] = lambda _: _,
-        filter: t.Callable[[t.Any], bool] = lambda _: True,
+        filter: t.Callable[[t.Any], bool] = lambda _: _ != ".",
     ) -> "Unbound2DGrid":
         rows = list(group)
         grid = cls(
@@ -228,6 +228,36 @@ class Graph:
                 heapq.heappush(q, self.WeightedNode(wn.weight + self.weight(a), a))
 
         return float("inf")
+
+    def shortest_paths(self, start: object, end: object) -> list[list[object]]:
+        q = [self.WeightedNode(0, start)]
+        heapq.heapify(q)
+
+        prev, dist = defaultdict(set), {start: 0}
+
+        # Run Dijkstra's algorithm and keep track of the previous nodes
+        while q:
+            wn = heapq.heappop(q)
+            for a in self.adj(wn.node):
+                if (w := dist.get(wn.node, float("inf")) + self.weight(a)) <= dist.get(
+                    a, float("inf")
+                ):
+                    dist[a] = w
+                    prev[a].add(wn.node)
+                    heapq.heappush(q, self.WeightedNode(w, a))
+
+        # Unravel the previous nodes to get the paths with DFS
+        paths, ends = [], {n for n in prev if n == end}
+        q = [(e, [e]) for e in ends if dist[e] == min(dist[e] for e in ends)]
+        while q:
+            n, p = q.pop()
+            np = [n, *p]
+            if n == start:
+                paths.append(np)
+            for _ in prev[n]:
+                q.append((_, np))
+
+        return paths
 
     def longest(self, start, end):
         seen, q = {}, deque([self.WeightedNode(0, start)])

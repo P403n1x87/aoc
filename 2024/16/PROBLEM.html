@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<meta charset="utf-8"/>
+<title>Day 16 - Advent of Code 2024</title>
+<link rel="stylesheet" type="text/css" href="/static/style.css?31"/>
+<link rel="stylesheet alternate" type="text/css" href="/static/highcontrast.css?1" title="High Contrast"/>
+<link rel="shortcut icon" href="/favicon.png"/>
+<script>window.addEventListener('click', function(e,s,r){if(e.target.nodeName==='CODE'&&e.detail===3){s=window.getSelection();s.removeAllRanges();r=document.createRange();r.selectNodeContents(e.target);s.addRange(r);}});</script>
+</head><!--
+
+
+
+
+Oh, hello!  Funny seeing you here.
+
+I appreciate your enthusiasm, but you aren't going to find much down here.
+There certainly aren't clues to any of the puzzles.  The best surprises don't
+even appear in the source until you unlock them for real.
+
+Please be careful with automated requests; I'm not a massive company, and I can
+only take so much traffic.  Please be considerate so that everyone gets to play.
+
+If you're curious about how Advent of Code works, it's running on some custom
+Perl code. Other than a few integrations (auth, analytics, social media), I
+built the whole thing myself, including the design, animations, prose, and all
+of the puzzles.
+
+The puzzles are most of the work; preparing a new calendar and a new set of
+puzzles each year takes all of my free time for 4-5 months. A lot of effort
+went into building this thing - I hope you're enjoying playing it as much as I
+enjoyed making it for you!
+
+If you'd like to hang out, I'm @was.tl on Bluesky, @ericwastl@hachyderm.io on
+Mastodon, and @ericwastl on Twitter.
+
+- Eric Wastl
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->
+<body>
+<header><div><h1 class="title-global"><a href="/">Advent of Code</a></h1><nav><ul><li><a href="/2024/about">[About]</a></li><li><a href="/2024/events">[Events]</a></li><li><a href="https://cottonbureau.com/people/advent-of-code" target="_blank">[Shop]</a></li><li><a href="/2024/settings">[Settings]</a></li><li><a href="/2024/auth/logout">[Log Out]</a></li></ul></nav><div class="user">P403n1x87 <span class="star-count">31*</span></div></div><div><h1 class="title-event">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="title-event-wrap">/*</span><a href="/2024">2024</a><span class="title-event-wrap">*/</span></h1><nav><ul><li><a href="/2024">[Calendar]</a></li><li><a href="/2024/support">[AoC++]</a></li><li><a href="/2024/sponsors">[Sponsors]</a></li><li><a href="/2024/leaderboard">[Leaderboard]</a></li><li><a href="/2024/stats">[Stats]</a></li></ul></nav></div></header>
+
+<div id="sidebar">
+<div id="sponsor"><div class="quiet">Our <a href="/2024/sponsors">sponsors</a> help make Advent of Code possible:</div><div class="sponsor"><a href="/2024/sponsors/redirect?url=https%3A%2F%2Fwww%2Ejpmorgan%2Ecom%2F" target="_blank" onclick="if(ga)ga('send','event','sponsor','sidebar',this.href);" rel="noopener">JPMorgan Chase</a> - With 60,000+ technologists globally and an annual tech spend of $17 billion, JPMorgan Chase is dedicated to improving the design, analytics, coding and testing that goes into creating high quality software products.</div></div>
+</div><!--/sidebar-->
+
+<main>
+<article class="day-desc"><h2>--- Day 16: Reindeer Maze ---</h2><p>It's time again for the <a href="/2015/day/14">Reindeer Olympics</a>! This year, the big event is the <em>Reindeer Maze</em>, where the Reindeer compete for the <em><span title="I would say it's like Reindeer Golf, but knowing Reindeer, it's almost certainly nothing like Reindeer Golf.">lowest score</span></em>.</p>
+<p>You and The Historians arrive to search for the Chief right as the event is about to start. It wouldn't hurt to watch a little, right?</p>
+<p>The Reindeer start on the Start Tile (marked <code>S</code>) facing <em>East</em> and need to reach the End Tile (marked <code>E</code>). They can move forward one tile at a time (increasing their score by <code>1</code> point), but never into a wall (<code>#</code>). They can also rotate clockwise or counterclockwise 90 degrees at a time (increasing their score by <code>1000</code> points).</p>
+<p>To figure out the best place to sit, you start by grabbing a map (your puzzle input) from a nearby kiosk. For example:</p>
+<pre><code>###############
+#.......#....E#
+#.#.###.#.###.#
+#.....#.#...#.#
+#.###.#####.#.#
+#.#.#.......#.#
+#.#.#####.###.#
+#...........#.#
+###.#.#####.#.#
+#...#.....#.#.#
+#.#.#.###.#.#.#
+#.....#...#.#.#
+#.###.#.#.#.#.#
+#S..#.....#...#
+###############
+</code></pre>
+<p>There are many paths through this maze, but taking any of the best paths would incur a score of only <code><em>7036</em></code>. This can be achieved by taking a total of <code>36</code> steps forward and turning 90 degrees a total of <code>7</code> times:</p>
+<pre><code>
+###############
+#.......#....<em>E</em>#
+#.#.###.#.###<em>^</em>#
+#.....#.#...#<em>^</em>#
+#.###.#####.#<em>^</em>#
+#.#.#.......#<em>^</em>#
+#.#.#####.###<em>^</em>#
+#..<em>&gt;</em><em>&gt;</em><em>&gt;</em><em>&gt;</em><em>&gt;</em><em>&gt;</em><em>&gt;</em><em>&gt;</em><em>v</em>#<em>^</em>#
+###<em>^</em>#.#####<em>v</em>#<em>^</em>#
+#<em>&gt;</em><em>&gt;</em><em>^</em>#.....#<em>v</em>#<em>^</em>#
+#<em>^</em>#.#.###.#<em>v</em>#<em>^</em>#
+#<em>^</em>....#...#<em>v</em>#<em>^</em>#
+#<em>^</em>###.#.#.#<em>v</em>#<em>^</em>#
+#S..#.....#<em>&gt;</em><em>&gt;</em><em>^</em>#
+###############
+</code></pre>
+<p>Here's a second example:</p>
+<pre><code>#################
+#...#...#...#..E#
+#.#.#.#.#.#.#.#.#
+#.#.#.#...#...#.#
+#.#.#.#.###.#.#.#
+#...#.#.#.....#.#
+#.#.#.#.#.#####.#
+#.#...#.#.#.....#
+#.#.#####.#.###.#
+#.#.#.......#...#
+#.#.###.#####.###
+#.#.#...#.....#.#
+#.#.#.#####.###.#
+#.#.#.........#.#
+#.#.#.#########.#
+#S#.............#
+#################
+</code></pre>
+<p>In this maze, the best paths cost <code><em>11048</em></code> points; following one such path would look like this:</p>
+<pre><code>#################
+#...#...#...#..<em>E</em>#
+#.#.#.#.#.#.#.#<em>^</em>#
+#.#.#.#...#...#<em>^</em>#
+#.#.#.#.###.#.#<em>^</em>#
+#<em>&gt;</em><em>&gt;</em><em>v</em>#.#.#.....#<em>^</em>#
+#<em>^</em>#<em>v</em>#.#.#.#####<em>^</em>#
+#<em>^</em>#<em>v</em>..#.#.#<em>&gt;</em><em>&gt;</em><em>&gt;</em><em>&gt;</em><em>^</em>#
+#<em>^</em>#<em>v</em>#####.#<em>^</em>###.#
+#<em>^</em>#<em>v</em>#..<em>&gt;</em><em>&gt;</em><em>&gt;</em><em>&gt;</em><em>^</em>#...#
+#<em>^</em>#<em>v</em>###<em>^</em>#####.###
+#<em>^</em>#<em>v</em>#<em>&gt;</em><em>&gt;</em><em>^</em>#.....#.#
+#<em>^</em>#<em>v</em>#<em>^</em>#####.###.#
+#<em>^</em>#<em>v</em>#<em>^</em>........#.#
+#<em>^</em>#<em>v</em>#<em>^</em>#########.#
+#S#<em>&gt;</em><em>&gt;</em><em>^</em>..........#
+#################
+</code></pre>
+<p>Note that the path shown above includes one 90 degree turn as the very first move, rotating the Reindeer from facing East to facing North.</p>
+<p>Analyze your map carefully. <em>What is the lowest score a Reindeer could possibly get?</em></p>
+</article>
+<p>Your puzzle answer was <code>99448</code>.</p><p class="day-success">The first half of this puzzle is complete! It provides one gold star: *</p>
+<article class="day-desc"><h2 id="part2">--- Part Two ---</h2><p>Now that you know what the best paths look like, you can figure out the best spot to sit.</p>
+<p>Every non-wall tile (<code>S</code>, <code>.</code>, or <code>E</code>) is equipped with places to sit along the edges of the tile. While determining which of these tiles would be the best spot to sit depends on a whole bunch of factors (how comfortable the seats are, how far away the bathrooms are, whether there's a pillar blocking your view, etc.), the most important factor is <em>whether the tile is on one of the best paths through the maze</em>. If you sit somewhere else, you'd miss all the action!</p>
+<p>So, you'll need to determine which tiles are part of <em>any</em> best path through the maze, including the <code>S</code> and <code>E</code> tiles.</p>
+<p>In the first example, there are <code><em>45</em></code> tiles (marked <code>O</code>) that are part of at least one of the various best paths through the maze:</p>
+<pre><code>###############
+#.......#....<em>O</em>#
+#.#.###.#.###<em>O</em>#
+#.....#.#...#<em>O</em>#
+#.###.#####.#<em>O</em>#
+#.#.#.......#<em>O</em>#
+#.#.#####.###<em>O</em>#
+#..<em>O</em><em>O</em><em>O</em><em>O</em><em>O</em><em>O</em><em>O</em><em>O</em><em>O</em>#<em>O</em>#
+###<em>O</em>#<em>O</em>#####<em>O</em>#<em>O</em>#
+#<em>O</em><em>O</em><em>O</em>#<em>O</em>....#<em>O</em>#<em>O</em>#
+#<em>O</em>#<em>O</em>#<em>O</em>###.#<em>O</em>#<em>O</em>#
+#<em>O</em><em>O</em><em>O</em><em>O</em><em>O</em>#...#<em>O</em>#<em>O</em>#
+#<em>O</em>###.#.#.#<em>O</em>#<em>O</em>#
+#<em>O</em>..#.....#<em>O</em><em>O</em><em>O</em>#
+###############
+</code></pre>
+<p>In the second example, there are <code><em>64</em></code> tiles that are part of at least one of the best paths:</p>
+<pre><code>#################
+#...#...#...#..<em>O</em>#
+#.#.#.#.#.#.#.#<em>O</em>#
+#.#.#.#...#...#<em>O</em>#
+#.#.#.#.###.#.#<em>O</em>#
+#<em>O</em><em>O</em><em>O</em>#.#.#.....#<em>O</em>#
+#<em>O</em>#<em>O</em>#.#.#.#####<em>O</em>#
+#<em>O</em>#<em>O</em>..#.#.#<em>O</em><em>O</em><em>O</em><em>O</em><em>O</em>#
+#<em>O</em>#<em>O</em>#####.#<em>O</em>###<em>O</em>#
+#<em>O</em>#<em>O</em>#..<em>O</em><em>O</em><em>O</em><em>O</em><em>O</em>#<em>O</em><em>O</em><em>O</em>#
+#<em>O</em>#<em>O</em>###<em>O</em>#####<em>O</em>###
+#<em>O</em>#<em>O</em>#<em>O</em><em>O</em><em>O</em>#..<em>O</em><em>O</em><em>O</em>#.#
+#<em>O</em>#<em>O</em>#<em>O</em>#####<em>O</em>###.#
+#<em>O</em>#<em>O</em>#<em>O</em><em>O</em><em>O</em><em>O</em><em>O</em><em>O</em><em>O</em>..#.#
+#<em>O</em>#<em>O</em>#<em>O</em>#########.#
+#<em>O</em>#<em>O</em><em>O</em><em>O</em>..........#
+#################
+</code></pre>
+<p>Analyze your map further. <em>How many tiles are part of at least one of the best paths through the maze?</em></p>
+</article>
+<form method="post" action="16/answer"><input type="hidden" name="level" value="2"/><p>Answer: <input type="text" name="answer" autocomplete="off"/> <input type="submit" value="[Submit]"/></p></form>
+<p>Although it hasn't changed, you can still <a href="16/input" target="_blank">get your puzzle input</a>.</p>
+<p>You can also <span class="share">[Share<span class="share-content">on
+  <a href="https://bsky.app/intent/compose?text=I%27ve+completed+Part+One+of+%22Reindeer+Maze%22+%2D+Day+16+%2D+Advent+of+Code+2024+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2024%2Fday%2F16" target="_blank">Bluesky</a>
+  <a href="https://twitter.com/intent/tweet?text=I%27ve+completed+Part+One+of+%22Reindeer+Maze%22+%2D+Day+16+%2D+Advent+of+Code+2024&amp;url=https%3A%2F%2Fadventofcode%2Ecom%2F2024%2Fday%2F16&amp;related=ericwastl&amp;hashtags=AdventOfCode" target="_blank">Twitter</a>
+  <a href="javascript:void(0);" onclick="var ms; try{ms=localStorage.getItem('mastodon.server')}finally{} if(typeof ms!=='string')ms=''; ms=prompt('Mastodon Server?',ms); if(typeof ms==='string' && ms.length){this.href='https://'+ms+'/share?text=I%27ve+completed+Part+One+of+%22Reindeer+Maze%22+%2D+Day+16+%2D+Advent+of+Code+2024+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2024%2Fday%2F16';try{localStorage.setItem('mastodon.server',ms);}finally{}}else{return false;}" target="_blank">Mastodon</a
+></span>]</span> this puzzle.</p>
+</main>
+
+<!-- ga -->
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-69522494-1', 'auto');
+ga('set', 'anonymizeIp', true);
+ga('send', 'pageview');
+</script>
+<!-- /ga -->
+</body>
+</html>
