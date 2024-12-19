@@ -19,3 +19,27 @@ def bisect(search_space: list, cond: callable) -> int:
             hi = mid
 
     return lo
+
+
+class Trie:
+    END = object()
+
+    def __init__(self, words=[]):
+        self.root = {}
+
+        for word in words:
+            self.add_word(word)
+
+    def add_word(self, word):
+        node = self.root
+        for char in word:
+            node = node.setdefault(char, {})
+        node[self.END] = self.END
+
+    def search(self, word):
+        node = self.root
+        for char in word:
+            if char not in node:
+                return False
+            node = node[char]
+        return self.END in node

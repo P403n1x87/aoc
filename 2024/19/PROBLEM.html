@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<meta charset="utf-8"/>
+<title>Day 19 - Advent of Code 2024</title>
+<link rel="stylesheet" type="text/css" href="/static/style.css?31"/>
+<link rel="stylesheet alternate" type="text/css" href="/static/highcontrast.css?1" title="High Contrast"/>
+<link rel="shortcut icon" href="/favicon.png"/>
+<script>window.addEventListener('click', function(e,s,r){if(e.target.nodeName==='CODE'&&e.detail===3){s=window.getSelection();s.removeAllRanges();r=document.createRange();r.selectNodeContents(e.target);s.addRange(r);}});</script>
+</head><!--
+
+
+
+
+Oh, hello!  Funny seeing you here.
+
+I appreciate your enthusiasm, but you aren't going to find much down here.
+There certainly aren't clues to any of the puzzles.  The best surprises don't
+even appear in the source until you unlock them for real.
+
+Please be careful with automated requests; I'm not a massive company, and I can
+only take so much traffic.  Please be considerate so that everyone gets to play.
+
+If you're curious about how Advent of Code works, it's running on some custom
+Perl code. Other than a few integrations (auth, analytics, social media), I
+built the whole thing myself, including the design, animations, prose, and all
+of the puzzles.
+
+The puzzles are most of the work; preparing a new calendar and a new set of
+puzzles each year takes all of my free time for 4-5 months. A lot of effort
+went into building this thing - I hope you're enjoying playing it as much as I
+enjoyed making it for you!
+
+If you'd like to hang out, I'm @was.tl on Bluesky, @ericwastl@hachyderm.io on
+Mastodon, and @ericwastl on Twitter.
+
+- Eric Wastl
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->
+<body>
+<header><div><h1 class="title-global"><a href="/">Advent of Code</a></h1><nav><ul><li><a href="/2024/about">[About]</a></li><li><a href="/2024/events">[Events]</a></li><li><a href="https://cottonbureau.com/people/advent-of-code" target="_blank">[Shop]</a></li><li><a href="/2024/settings">[Settings]</a></li><li><a href="/2024/auth/logout">[Log Out]</a></li></ul></nav><div class="user">P403n1x87 <span class="star-count">37*</span></div></div><div><h1 class="title-event">&nbsp;&nbsp;&nbsp;<span class="title-event-wrap">int y=</span><a href="/2024">2024</a><span class="title-event-wrap">;</span></h1><nav><ul><li><a href="/2024">[Calendar]</a></li><li><a href="/2024/support">[AoC++]</a></li><li><a href="/2024/sponsors">[Sponsors]</a></li><li><a href="/2024/leaderboard">[Leaderboard]</a></li><li><a href="/2024/stats">[Stats]</a></li></ul></nav></div></header>
+
+<div id="sidebar">
+<div id="sponsor"><div class="quiet">Our <a href="/2024/sponsors">sponsors</a> help make Advent of Code possible:</div><div class="sponsor"><a href="/2024/sponsors/redirect?url=https%3A%2F%2Fcodecrafters%2Eio%2Faoc2024" target="_blank" onclick="if(ga)ga('send','event','sponsor','sidebar',this.href);" rel="noopener">CodeCrafters.io</a> - Build your own Interpreter, SQLite, or Git. =============== It&apos;s coding practice on steroids. ============== Try it out for free today &gt;&gt; =============== Bonus, solve this: PWFI YFRP, ZIK XVNVC% KTW GOXA MMQEMOTH</div></div>
+</div><!--/sidebar-->
+
+<main>
+<article class="day-desc"><h2>--- Day 19: Linen Layout ---</h2><p>Today, The Historians take you up to the <a href="/2023/day/12">hot springs</a> on Gear Island! Very <a href="https://www.youtube.com/watch?v=ekL881PJMjI" target="_blank">suspiciously</a>, absolutely nothing goes wrong as they begin their careful search of the vast field of helixes.</p>
+<p>Could this <em>finally</em> be your chance to visit the <a href="https://en.wikipedia.org/wiki/Onsen" target="_blank">onsen</a> next door? Only one way to find out.</p>
+<p>After a brief conversation with the reception staff at the onsen front desk, you discover that you don't have the right kind of money to pay the admission fee. However, before you can leave, the staff get your attention. Apparently, they've heard about how you helped at the hot springs, and they're willing to make a deal: if you can simply help them <em>arrange their towels</em>, they'll let you in for <em>free</em>!</p>
+<p>Every towel at this onsen is marked with a <em>pattern of colored stripes</em>. There are only a few patterns, but for any particular pattern, the staff can get you as many towels with that pattern as you need. Each <span title="It really seems like they've gathered a lot of magic into the towel colors.">stripe</span> can be <em>white</em> (<code>w</code>), <em>blue</em> (<code>u</code>), <em>black</em> (<code>b</code>), <em>red</em> (<code>r</code>), or <em>green</em> (<code>g</code>). So, a towel with the pattern <code>ggr</code> would have a green stripe, a green stripe, and then a red stripe, in that order. (You can't reverse a pattern by flipping a towel upside-down, as that would cause the onsen logo to face the wrong way.)</p>
+<p>The Official Onsen Branding Expert has produced a list of <em>designs</em> - each a long sequence of stripe colors - that they would like to be able to display. You can use any towels you want, but all of the towels' stripes must exactly match the desired design. So, to display the design <code>rgrgr</code>, you could use two <code>rg</code> towels and then an <code>r</code> towel, an <code>rgr</code> towel and then a <code>gr</code> towel, or even a single massive <code>rgrgr</code> towel (assuming such towel patterns were actually available).</p>
+<p>To start, collect together all of the available towel patterns and the list of desired designs (your puzzle input). For example:</p>
+<pre><code>r, wr, b, g, bwu, rb, gb, br
+
+brwrr
+bggr
+gbbr
+rrbgbr
+ubwu
+bwurrg
+brgr
+bbrgwb
+</code></pre>
+<p>The first line indicates the available towel patterns; in this example, the onsen has unlimited towels with a single red stripe (<code>r</code>), unlimited towels with a white stripe and then a red stripe (<code>wr</code>), and so on.</p>
+<p>After the blank line, the remaining lines each describe a design the onsen would like to be able to display. In this example, the first design (<code>brwrr</code>) indicates that the onsen would like to be able to display a black stripe, a red stripe, a white stripe, and then two red stripes, in that order.</p>
+<p>Not all designs will be possible with the available towels. In the above example, the designs are possible or impossible as follows:</p>
+<ul>
+<li><code>brwrr</code> can be made with a <code>br</code> towel, then a <code>wr</code> towel, and then finally an <code>r</code> towel.</li>
+<li><code>bggr</code> can be made with a <code>b</code> towel, two <code>g</code> towels, and then an <code>r</code> towel.</li>
+<li><code>gbbr</code> can be made with a <code>gb</code> towel and then a <code>br</code> towel.</li>
+<li><code>rrbgbr</code> can be made with <code>r</code>, <code>rb</code>, <code>g</code>, and <code>br</code>.</li>
+<li><code>ubwu</code> is <em>impossible</em>.</li>
+<li><code>bwurrg</code> can be made with <code>bwu</code>, <code>r</code>, <code>r</code>, and <code>g</code>.</li>
+<li><code>brgr</code> can be made with <code>br</code>, <code>g</code>, and <code>r</code>.</li>
+<li><code>bbrgwb</code> is <em>impossible</em>.</li>
+</ul>
+<p>In this example, <code><em>6</em></code> of the eight designs are possible with the available towel patterns.</p>
+<p>To get into the onsen as soon as possible, consult your list of towel patterns and desired designs carefully. <em>How many designs are possible?</em></p>
+</article>
+<p>Your puzzle answer was <code>240</code>.</p><p class="day-success">The first half of this puzzle is complete! It provides one gold star: *</p>
+<article class="day-desc"><h2 id="part2">--- Part Two ---</h2><p>The staff don't really like some of the towel arrangements you came up with. To avoid an endless cycle of towel rearrangement, maybe you should just give them every possible option.</p>
+<p>Here are all of the different ways the above example's designs can be made:</p>
+<p><code>brwrr</code> can be made in two different ways: <code>b</code>, <code>r</code>, <code>wr</code>, <code>r</code> <em>or</em> <code>br</code>, <code>wr</code>, <code>r</code>.</p>
+<p><code>bggr</code> can only be made with <code>b</code>, <code>g</code>, <code>g</code>, and <code>r</code>.</p>
+<p><code>gbbr</code> can be made 4 different ways:</p>
+<ul>
+<li><code>g</code>, <code>b</code>, <code>b</code>, <code>r</code></li>
+<li><code>g</code>, <code>b</code>, <code>br</code></li>
+<li><code>gb</code>, <code>b</code>, <code>r</code></li>
+<li><code>gb</code>, <code>br</code></li>
+</ul>
+<p><code>rrbgbr</code> can be made 6 different ways:</p>
+<ul>
+<li><code>r</code>, <code>r</code>, <code>b</code>, <code>g</code>, <code>b</code>, <code>r</code></li>
+<li><code>r</code>, <code>r</code>, <code>b</code>, <code>g</code>, <code>br</code></li>
+<li><code>r</code>, <code>r</code>, <code>b</code>, <code>gb</code>, <code>r</code></li>
+<li><code>r</code>, <code>rb</code>, <code>g</code>, <code>b</code>, <code>r</code></li>
+<li><code>r</code>, <code>rb</code>, <code>g</code>, <code>br</code></li>
+<li><code>r</code>, <code>rb</code>, <code>gb</code>, <code>r</code></li>
+</ul>
+<p><code>bwurrg</code> can only be made with <code>bwu</code>, <code>r</code>, <code>r</code>, and <code>g</code>.</p>
+<p><code>brgr</code> can be made in two different ways: <code>b</code>, <code>r</code>, <code>g</code>, <code>r</code> <em>or</em> <code>br</code>, <code>g</code>, <code>r</code>.</p>
+<p><code>ubwu</code> and <code>bbrgwb</code> are still impossible.</p>
+<p>Adding up all of the ways the towels in this example could be arranged into the desired designs yields <code><em>16</em></code> (<code>2 + 1 + 4 + 6 + 1 + 2</code>).</p>
+<p>They'll let you into the onsen as soon as you have the list. <em>What do you get if you add up the number of different ways you could make each design?</em></p>
+</article>
+<form method="post" action="19/answer"><input type="hidden" name="level" value="2"/><p>Answer: <input type="text" name="answer" autocomplete="off"/> <input type="submit" value="[Submit]"/></p></form>
+<p>Although it hasn't changed, you can still <a href="19/input" target="_blank">get your puzzle input</a>.</p>
+<p>You can also <span class="share">[Share<span class="share-content">on
+  <a href="https://bsky.app/intent/compose?text=I%27ve+completed+Part+One+of+%22Linen+Layout%22+%2D+Day+19+%2D+Advent+of+Code+2024+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2024%2Fday%2F19" target="_blank">Bluesky</a>
+  <a href="https://twitter.com/intent/tweet?text=I%27ve+completed+Part+One+of+%22Linen+Layout%22+%2D+Day+19+%2D+Advent+of+Code+2024&amp;url=https%3A%2F%2Fadventofcode%2Ecom%2F2024%2Fday%2F19&amp;related=ericwastl&amp;hashtags=AdventOfCode" target="_blank">Twitter</a>
+  <a href="javascript:void(0);" onclick="var ms; try{ms=localStorage.getItem('mastodon.server')}finally{} if(typeof ms!=='string')ms=''; ms=prompt('Mastodon Server?',ms); if(typeof ms==='string' && ms.length){this.href='https://'+ms+'/share?text=I%27ve+completed+Part+One+of+%22Linen+Layout%22+%2D+Day+19+%2D+Advent+of+Code+2024+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2024%2Fday%2F19';try{localStorage.setItem('mastodon.server',ms);}finally{}}else{return false;}" target="_blank">Mastodon</a
+></span>]</span> this puzzle.</p>
+</main>
+
+<!-- ga -->
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-69522494-1', 'auto');
+ga('set', 'anonymizeIp', true);
+ga('send', 'pageview');
+</script>
+<!-- /ga -->
+</body>
+</html>
