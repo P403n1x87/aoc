@@ -141,6 +141,12 @@ class Unbound2DGrid(dict):
         """Find the first point with the given value."""
         return next(k for k, v in self.items() if v == value)
 
+    def n4(self, p):
+        return (p + d for d in D4)
+
+    def adj(self, p, value="#"):
+        return [n for n in self.n4(p) if self.get(n) != value]
+
     @classmethod
     def from_group(
         cls,
@@ -187,6 +193,9 @@ class Bounded2DGrid(Unbound2DGrid):
             for x in range(xr.lo, xr.hi + 1):
                 print(self.get(x + y * 1j, " "), end="")
             print()
+
+    def adj(self, p, value="#"):
+        return [n for n in self.n4(p) if self.within(p) and self.get(n) != value]
 
 
 class Graph:
