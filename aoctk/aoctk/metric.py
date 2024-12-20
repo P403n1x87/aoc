@@ -1,6 +1,10 @@
-import typing as t
+from functools import cache
 
 
-def manhattan2d(z: complex, w: t.Optional[complex] = None) -> int:
-    d = z - w if w is not None else z
+@cache
+def _manhattan2d(d: complex) -> int:
     return int(abs(d.real) + abs(d.imag))
+
+
+def manhattan2d(z: complex, w: complex = 0) -> int:
+    return _manhattan2d(z - w)
