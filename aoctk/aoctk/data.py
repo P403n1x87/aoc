@@ -10,8 +10,6 @@ from aoctk.metric import manhattan2d as m2d
 D4 = tuple(1j**i for i in range(4))
 D8 = tuple(complex(i, j) for i in (-1, 0, 1) for j in (-1, 0, 1) if i or j)
 
-M4 = {">": 1, "<": -1, "v": 1j, "^": -1j}
-
 
 def wrap(p: complex, w: int, h: int) -> complex:
     return complex(int(p.real) % w, int(p.imag) % h)
@@ -234,7 +232,9 @@ class Graph:
                 continue
             seen.add(wn.node)
             for a in self.adj(wn.node):
-                heapq.heappush(q, self.WeightedNode(wn.weight + self.weight(a), a))
+                heapq.heappush(
+                    q, self.WeightedNode(wn.weight + self.weight(a, wn.node), a)
+                )
 
         return float("inf")
 
@@ -248,9 +248,9 @@ class Graph:
         while q:
             wn = heapq.heappop(q)
             for a in self.adj(wn.node):
-                if (w := dist.get(wn.node, float("inf")) + self.weight(a)) <= dist.get(
-                    a, float("inf")
-                ):
+                if (
+                    w := dist.get(wn.node, float("inf")) + self.weight(a, wn.node)
+                ) <= dist.get(a, float("inf")):
                     dist[a] = w
                     prev[a].add(wn.node)
                     heapq.heappush(q, self.WeightedNode(w, a))
@@ -375,6 +375,17 @@ class bij(dict):
         if len(set(self.keys())) != len(set(self.values())):
             raise ValueError("Not a bijection")
         self.inv = {v: k for k, v in self.items()}
+
+    @property
+    def range(self):
+        return self.values()
+
+    @property
+    def domain(self):
+        return self.keys()
+
+
+M4 = bij({">": 1, "<": -1, "v": 1j, "^": -1j})
 
 
 class Path2D(list):
