@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<meta charset="utf-8"/>
+<title>Day 2 - Advent of Code 2025</title>
+<link rel="stylesheet" type="text/css" href="/static/style.css?32"/>
+<link rel="stylesheet alternate" type="text/css" href="/static/highcontrast.css?2" title="High Contrast"/>
+<link rel="shortcut icon" href="/favicon.png"/>
+<script>window.addEventListener('click', function(e,s,r){if(e.target.nodeName==='CODE'&&e.detail===3){s=window.getSelection();s.removeAllRanges();r=document.createRange();r.selectNodeContents(e.target);s.addRange(r);}});</script>
+</head><!--
+
+
+
+
+Oh, hello!  Funny seeing you here.
+
+I appreciate your enthusiasm, but you aren't going to find much down here.
+There certainly aren't clues to any of the puzzles.  The best surprises don't
+even appear in the source until you unlock them for real.
+
+Please be careful with automated requests; I'm not a massive company, and I can
+only take so much traffic.  Please be considerate so that everyone gets to play.
+
+If you're curious about how Advent of Code works, it's running on some custom
+Perl code. Other than a few integrations (auth, analytics, social media), I
+built the whole thing myself, including the design, animations, prose, and all
+of the puzzles.
+
+The puzzles are most of the work; preparing a new calendar and a new set of
+puzzles takes all of my free time for months every year. A lot of effort went
+into building this thing - I hope you're enjoying playing it as much as I
+enjoyed making it for you!
+
+If you'd like to hang out, I'm @was.tl on Bluesky and @ericwastl@hachyderm.io
+on Mastodon.
+
+- Eric Wastl
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->
+<body>
+<header><div><h1 class="title-global"><a href="/">Advent of Code</a></h1><nav><ul><li><a href="/2025/about">[About]</a></li><li><a href="/2025/events">[Events]</a></li><li><a href="https://cottonbureau.com/people/advent-of-code" target="_blank">[Shop]</a></li><li><a href="/2025/settings">[Settings]</a></li><li><a href="/2025/auth/logout">[Log Out]</a></li></ul></nav><div class="user">P403n1x87 <span class="star-count">3*</span></div></div><div><h1 class="title-event">&nbsp;&nbsp;<span class="title-event-wrap">{year=&gt;</span><a href="/2025">2025</a><span class="title-event-wrap">}</span></h1><nav><ul><li><a href="/2025">[Calendar]</a></li><li><a href="/2025/support">[AoC++]</a></li><li><a href="/2025/sponsors">[Sponsors]</a></li><li><a href="/2025/leaderboard/private">[Leaderboards]</a></li><li><a href="/2025/stats">[Stats]</a></li></ul></nav></div></header>
+
+<div id="sidebar">
+<div id="sponsor"><div class="quiet">Our <a href="/2025/sponsors">sponsors</a> help make Advent of Code possible:</div><div class="sponsor"><a href="/2025/sponsors/redirect?url=https%3A%2F%2Fcoderabbit%2Elink%2Fadventofcode" target="_blank" onclick="if(ga)ga('send','event','sponsor','sidebar',this.href);" rel="noopener">CodeRabbit</a> - Cut Code Review Time and Bugs in Half</div></div>
+</div><!--/sidebar-->
+
+<main>
+<article class="day-desc"><h2>--- Day 2: Gift Shop ---</h2><p>You get inside and take the elevator to its only other stop: the gift shop. "Thank you for visiting the North Pole!" gleefully exclaims a nearby sign. You aren't sure who is even allowed to visit the North Pole, but you know you can access the lobby through here, and from there you can access the rest of the North Pole base.</p>
+<p>As you make your way through the <span title="They even sell lunch boxes and blue tents!">surprisingly extensive</span> selection, one of the clerks recognizes you and asks for your help.</p>
+<p>As it turns out, one of the younger Elves was playing on a gift shop computer and managed to add a whole bunch of invalid product IDs to their gift shop database! Surely, it would be no trouble for you to identify the invalid product IDs for them, right?</p>
+<p>They've even checked most of the product ID ranges already; they only have a few product ID ranges (your puzzle input) that you'll need to check. For example:</p>
+<pre><code>11-22,95-115,998-1012,1188511880-1188511890,222220-222224,
+1698522-1698528,446443-446449,38593856-38593862,565653-565659,
+824824821-824824827,2121212118-2121212124</code></pre>
+<p>(The ID ranges are wrapped here for legibility; in your input, they appear on a single long line.)</p>
+<p>The ranges are separated by commas (<code>,</code>); each range gives its <em>first ID</em> and <em>last ID</em> separated by a dash (<code>-</code>).</p>
+<p>Since the young Elf was just doing silly patterns, you can find the <em>invalid IDs</em> by looking for any ID which is made only of some sequence of digits repeated twice. So, <code>55</code> (<code>5</code> twice), <code>6464</code> (<code>64</code> twice), and <code>123123</code> (<code>123</code> twice) would all be invalid IDs.</p>
+<p>None of the numbers have leading zeroes; <code>0101</code> isn't an ID at all. (<code>101</code> is a <em>valid</em> ID that you would ignore.)</p>
+<p>Your job is to find all of the invalid IDs that appear in the given ranges. In the above example:</p>
+<ul>
+<li><code>11-22</code> has two invalid IDs, <code><em>11</em></code> and <code><em>22</em></code>.</li>
+<li><code>95-115</code> has one invalid ID, <code><em>99</em></code>.</li>
+<li><code>998-1012</code> has one invalid ID, <code><em>1010</em></code>.</li>
+<li><code>1188511880-1188511890</code> has one invalid ID, <code><em>1188511885</em></code>.</li>
+<li><code>222220-222224</code> has one invalid ID, <code><em>222222</em></code>.</li>
+<li><code>1698522-1698528</code> contains no invalid IDs.</li>
+<li><code>446443-446449</code> has one invalid ID, <code><em>446446</em></code>.</li>
+<li><code>38593856-38593862</code> has one invalid ID, <code><em>38593859</em></code>.</li>
+<li>The rest of the ranges contain no invalid IDs.</li>
+</ul>
+<p>Adding up all the invalid IDs in this example produces <code><em>1227775554</em></code>.</p>
+<p><em>What do you get if you add up all of the invalid IDs?</em></p>
+</article>
+<p>Your puzzle answer was <code>8576933996</code>.</p><p class="day-success">The first half of this puzzle is complete! It provides one gold star: *</p>
+<article class="day-desc"><h2 id="part2">--- Part Two ---</h2><p>The clerk quickly discovers that there are still invalid IDs in the ranges in your list. Maybe the young Elf was doing other silly patterns as well?</p>
+<p>Now, an ID is invalid if it is made only of some sequence of digits repeated <em>at least</em> twice. So, <code>12341234</code> (<code>1234</code> two times), <code>123123123</code> (<code>123</code> three times), <code>1212121212</code> (<code>12</code> five times), and <code>1111111</code> (<code>1</code> seven times) are all invalid IDs.</p>
+<p>From the same example as before:</p>
+<ul>
+<li><code>11-22</code> still has two invalid IDs, <code><em>11</em></code> and <code><em>22</em></code>.</li>
+<li><code>95-115</code> now has two invalid IDs, <code><em>99</em></code> and <code><em>111</em></code>.</li>
+<li><code>998-1012</code> now has two invalid IDs, <code><em>999</em></code> and <code><em>1010</em></code>.</li>
+<li><code>1188511880-1188511890</code> still has one invalid ID, <code><em>1188511885</em></code>.</li>
+<li><code>222220-222224</code> still has one invalid ID, <code><em>222222</em></code>.</li>
+<li><code>1698522-1698528</code> still contains no invalid IDs.</li>
+<li><code>446443-446449</code> still has one invalid ID, <code><em>446446</em></code>.</li>
+<li><code>38593856-38593862</code> still has one invalid ID, <code><em>38593859</em></code>.</li>
+<li><code>565653-565659</code> now has one invalid ID, <code><em>565656</em></code>.</li>
+<li><code>824824821-824824827</code> now has one invalid ID, <code><em>824824824</em></code>.</li>
+<li><code>2121212118-2121212124</code> now has one invalid ID, <code><em>2121212121</em></code>.</li>
+</ul>
+<p>Adding up all the invalid IDs in this example produces <code><em>4174379265</em></code>.</p>
+<p><em>What do you get if you add up all of the invalid IDs using these new rules?</em></p>
+</article>
+<form method="post" action="2/answer"><input type="hidden" name="level" value="2"/><p>Answer: <input type="text" name="answer" autocomplete="off"/> <input type="submit" value="[Submit]"/></p></form>
+<p>Although it hasn't changed, you can still <a href="2/input" target="_blank">get your puzzle input</a>.</p>
+<p>You can also <span class="share">[Share<span class="share-content">on
+  <a href="https://bsky.app/intent/compose?text=I%27ve+completed+Part+One+of+%22Gift+Shop%22+%2D+Day+2+%2D+Advent+of+Code+2025+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2025%2Fday%2F2" target="_blank">Bluesky</a>
+  <a href="https://twitter.com/intent/tweet?text=I%27ve+completed+Part+One+of+%22Gift+Shop%22+%2D+Day+2+%2D+Advent+of+Code+2025&amp;url=https%3A%2F%2Fadventofcode%2Ecom%2F2025%2Fday%2F2&amp;related=ericwastl&amp;hashtags=AdventOfCode" target="_blank">Twitter</a>
+  <a href="javascript:void(0);" onclick="var ms; try{ms=localStorage.getItem('mastodon.server')}finally{} if(typeof ms!=='string')ms=''; ms=prompt('Mastodon Server?',ms); if(typeof ms==='string' && ms.length){this.href='https://'+ms+'/share?text=I%27ve+completed+Part+One+of+%22Gift+Shop%22+%2D+Day+2+%2D+Advent+of+Code+2025+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2025%2Fday%2F2';try{localStorage.setItem('mastodon.server',ms);}finally{}}else{return false;}" target="_blank">Mastodon</a
+></span>]</span> this puzzle.</p>
+</main>
+
+<!-- ga -->
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-69522494-1', 'auto');
+ga('set', 'anonymizeIp', true);
+ga('send', 'pageview');
+</script>
+<!-- /ga -->
+</body>
+</html>
