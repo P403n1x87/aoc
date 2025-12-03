@@ -12,3 +12,8 @@ def iteratewhile(cond, func, x):
 
 def window(iterable, size):
     yield from zip(*(islice(t, i, None) for i, t in enumerate(tee(iterable, size))))
+
+
+def argmax(iterable) -> int:
+    """Return the index of the maximum element in an iterable."""
+    return max(enumerate(iterable), key=lambda x: x[1])[0]
