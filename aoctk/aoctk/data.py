@@ -145,6 +145,10 @@ class Unbound2DGrid(dict):
     def adj(self, p, value="#"):
         return [n for n in self.n4(p) if self.get(n) != value]
 
+    def remove(self, ps: t.Iterable[complex]) -> None:
+        for p in ps:
+            del self[p]
+
     @classmethod
     def from_group(
         cls,
