@@ -95,6 +95,11 @@ class Range:
             wranges.append((r, 1))
         return wranges
 
+    @classmethod
+    def parse(cls, s: str, sep="-") -> "Range":
+        lo, hi = map(int, s.split(sep))
+        return cls(lo, hi)
+
 
 def weighted_union_size(weighted_ranges: t.Iterable[t.Tuple[Range, int]]) -> int:
     """Helper for computing the size of a weighted union of ranges."""
