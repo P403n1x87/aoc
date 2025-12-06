@@ -15,6 +15,10 @@ def wrap(p: complex, w: int, h: int) -> complex:
     return complex(int(p.real) % w, int(p.imag) % h)
 
 
+def pivot(matrix: t.List[t.List[t.Any]]) -> t.List[t.List[t.Any]]:
+    return [list(row) for row in zip(*matrix)]
+
+
 @dataclass
 class Range:
     lo: int
