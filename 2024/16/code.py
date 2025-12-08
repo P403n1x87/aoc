@@ -19,7 +19,7 @@ class Node:
 
 
 class Map(Graph):
-    def weight(self, n: Node) -> int:
+    def weight(self, n: Node, m=None) -> int:
         return 1 + n.t * 1000
 
     def adj(self, n: Node) -> list[Node]:
