@@ -116,6 +116,23 @@ for n, f in [(1, code.part_one), (2, code.part_two)]:
 }
 
 
+function profile {
+    year="${2:-$(date +%Y)}"
+    day="${3:-$(date +%-d)}"
+
+    check_init
+
+    source .venv/bin/activate
+        PYTHONPATH=$year/$day austin -co ${year}/${day}/profile.mojo python -c "
+import code
+
+for f in (code.part_one, code.part_two):
+    f()
+"
+    deactivate
+}
+
+
 function submit {
     part="${2}"
     solution="${3}"
@@ -179,6 +196,9 @@ function main {
             ;;
         run)
             run $@
+            ;;
+        profile)
+            profile $@
             ;;
         submit)
             submit $@
