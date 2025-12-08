@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<meta charset="utf-8"/>
+<title>Day 8 - Advent of Code 2025</title>
+<link rel="stylesheet" type="text/css" href="/static/style.css?32"/>
+<link rel="stylesheet alternate" type="text/css" href="/static/highcontrast.css?2" title="High Contrast"/>
+<link rel="shortcut icon" href="/favicon.png"/>
+<script>window.addEventListener('click', function(e,s,r){if(e.target.nodeName==='CODE'&&e.detail===3){s=window.getSelection();s.removeAllRanges();r=document.createRange();r.selectNodeContents(e.target);s.addRange(r);}});</script>
+</head><!--
+
+
+
+
+Oh, hello!  Funny seeing you here.
+
+I appreciate your enthusiasm, but you aren't going to find much down here.
+There certainly aren't clues to any of the puzzles.  The best surprises don't
+even appear in the source until you unlock them for real.
+
+Please be careful with automated requests; I'm not a massive company, and I can
+only take so much traffic.  Please be considerate so that everyone gets to play.
+
+If you're curious about how Advent of Code works, it's running on some custom
+Perl code. Other than a few integrations (auth, analytics, social media), I
+built the whole thing myself, including the design, animations, prose, and all
+of the puzzles.
+
+The puzzles are most of the work; preparing a new calendar and a new set of
+puzzles takes all of my free time for months every year. A lot of effort went
+into building this thing - I hope you're enjoying playing it as much as I
+enjoyed making it for you!
+
+If you'd like to hang out, I'm @was.tl on Bluesky and @ericwastl@hachyderm.io
+on Mastodon.
+
+- Eric Wastl
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->
+<body>
+<header><div><h1 class="title-global"><a href="/">Advent of Code</a></h1><nav><ul><li><a href="/2025/about">[About]</a></li><li><a href="/2025/events">[Events]</a></li><li><a href="/2025/shop">[Shop]</a></li><li><a href="/2025/settings">[Settings]</a></li><li><a href="/2025/auth/logout">[Log Out]</a></li></ul></nav><div class="user">P403n1x87 <span class="star-count">15*</span></div></div><div><h1 class="title-event">&nbsp;&nbsp;<span class="title-event-wrap">{:year </span><a href="/2025">2025</a><span class="title-event-wrap">}</span></h1><nav><ul><li><a href="/2025">[Calendar]</a></li><li><a href="/2025/support">[AoC++]</a></li><li><a href="/2025/sponsors">[Sponsors]</a></li><li><a href="/2025/leaderboard/private">[Leaderboards]</a></li><li><a href="/2025/stats">[Stats]</a></li></ul></nav></div></header>
+
+<div id="sidebar">
+<div id="sponsor"><div class="quiet">Our <a href="/2025/sponsors">sponsors</a> help make Advent of Code possible:</div><div class="sponsor"><a href="/2025/sponsors/redirect?url=https%3A%2F%2Fcoderabbit%2Elink%2Fadventofcode" target="_blank" onclick="if(ga)ga('send','event','sponsor','sidebar',this.href);" rel="noopener">CodeRabbit</a> - Cut Code Review Time and Bugs in Half</div></div>
+</div><!--/sidebar-->
+
+<main>
+<article class="day-desc"><h2>--- Day 8: Playground ---</h2><p>Equipped with a new understanding of teleporter maintenance, you confidently step onto the repaired teleporter pad.</p>
+<p>You rematerialize on an unfamiliar teleporter pad and find yourself in a vast underground space which contains a giant playground!</p>
+<p>Across the playground, a group of Elves are working on setting up an ambitious Christmas decoration project. Through careful rigging, they have suspended a large number of small electrical <a href="https://en.wikipedia.org/wiki/Junction_box" target="_blank">junction boxes</a>.</p>
+<p>Their plan is to connect the junction boxes with long strings of lights. Most of the junction boxes don't provide electricity; however, when two junction boxes are connected by a string of lights, electricity can pass between those two junction boxes.</p>
+<p>The Elves are trying to figure out <em>which junction boxes to connect</em> so that electricity can reach <em>every</em> junction box. They even have a list of all of the junction boxes' positions in 3D space (your puzzle input).</p>
+<p>For example:</p>
+<pre><code>162,817,812
+57,618,57
+906,360,560
+592,479,940
+352,342,300
+466,668,158
+542,29,236
+431,825,988
+739,650,466
+52,470,668
+216,146,977
+819,987,18
+117,168,530
+805,96,715
+346,949,466
+970,615,88
+941,993,340
+862,61,35
+984,92,344
+425,690,689
+</code></pre>
+<p>This list describes the position of 20 junction boxes, one per line. Each position is given as <code>X,Y,Z</code> coordinates. So, the first junction box in the list is at <code>X=162</code>, <code>Y=817</code>, <code>Z=812</code>.</p>
+<p>To save on string lights, the Elves would like to focus on connecting pairs of junction boxes that are <em>as close together as possible</em> according to <a href="https://en.wikipedia.org/wiki/Euclidean_distance" target="_blank">straight-line distance</a>. In this example, the two junction boxes which are closest together are <code>162,817,812</code> and <code>425,690,689</code>.</p>
+<p>By connecting these two junction boxes together, because electricity can flow between them, they become part of the same <em>circuit</em>. After connecting them, there is a single circuit which contains two junction boxes, and the remaining 18 junction boxes remain in their own individual circuits.</p>
+<p>Now, the two junction boxes which are closest together but aren't already directly connected are <code>162,817,812</code> and <code>431,825,988</code>. After connecting them, since <code>162,817,812</code> is already connected to another junction box, there is now a single circuit which contains <em>three</em> junction boxes and an additional 17 circuits which contain one junction box each.</p>
+<p>The next two junction boxes to connect are <code>906,360,560</code> and <code>805,96,715</code>. After connecting them, there is a circuit containing 3 junction boxes, a circuit containing 2 junction boxes, and 15 circuits which contain one junction box each.</p>
+<p>The next two junction boxes are <code>431,825,988</code> and <code>425,690,689</code>. Because these two junction boxes were <em>already in the same circuit</em>, nothing happens!</p>
+<p>This process continues for a while, and the Elves are concerned that they don't have enough extension cables for all these circuits. They would like to know how big the circuits will be.</p>
+<p>After making the ten shortest connections, there are 11 circuits: one circuit which contains <em>5</em> junction boxes, one circuit which contains <em>4</em> junction boxes, two circuits which contain <em>2</em> junction boxes each, and seven circuits which each contain a single junction box. Multiplying together the sizes of the three largest circuits (5, 4, and one of the circuits of size 2) produces <code><em>40</em></code>.</p>
+<p>Your list contains many junction boxes; connect together the <em>1000</em> pairs of junction boxes which are closest together. Afterward, <em>what do you get if you multiply together the sizes of the three largest circuits?</em></p>
+</article>
+<p>Your puzzle answer was <code>153328</code>.</p><p class="day-success">The first half of this puzzle is complete! It provides one gold star: *</p>
+<article class="day-desc"><h2 id="part2">--- Part Two ---</h2><p>The Elves were right; they <em>definitely</em> don't have enough extension cables. You'll need to keep connecting junction boxes together until they're all in <em>one large circuit</em>.</p>
+<p>Continuing the above example, the first connection which causes all of the junction boxes to form a single circuit is between the junction boxes at <code>216,146,977</code> and <code>117,168,530</code>. The Elves need to know how far those junction boxes are from the wall so they can pick the right extension cable; multiplying the X coordinates of those two junction boxes (<code>216</code> and <code>117</code>) produces <code><em>25272</em></code>.</p>
+<p>Continue connecting the closest unconnected pairs of junction boxes together until they're <span title="I strongly recommend making an interactive visualizer for this one; it reminds me a lot of maps from futuristic space games.">all in the same circuit</span>. <em>What do you get if you multiply together the X coordinates of the last two junction boxes you need to connect?</em></p>
+</article>
+<form method="post" action="8/answer"><input type="hidden" name="level" value="2"/><p>Answer: <input type="text" name="answer" autocomplete="off"/> <input type="submit" value="[Submit]"/></p></form>
+<p>Although it hasn't changed, you can still <a href="8/input" target="_blank">get your puzzle input</a>.</p>
+<p>You can also <span class="share">[Share<span class="share-content">on
+  <a href="https://bsky.app/intent/compose?text=I%27ve+completed+Part+One+of+%22Playground%22+%2D+Day+8+%2D+Advent+of+Code+2025+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2025%2Fday%2F8" target="_blank">Bluesky</a>
+  <a href="https://twitter.com/intent/tweet?text=I%27ve+completed+Part+One+of+%22Playground%22+%2D+Day+8+%2D+Advent+of+Code+2025&amp;url=https%3A%2F%2Fadventofcode%2Ecom%2F2025%2Fday%2F8&amp;related=ericwastl&amp;hashtags=AdventOfCode" target="_blank">Twitter</a>
+  <a href="javascript:void(0);" onclick="var ms; try{ms=localStorage.getItem('mastodon.server')}finally{} if(typeof ms!=='string')ms=''; ms=prompt('Mastodon Server?',ms); if(typeof ms==='string' && ms.length){this.href='https://'+ms+'/share?text=I%27ve+completed+Part+One+of+%22Playground%22+%2D+Day+8+%2D+Advent+of+Code+2025+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2025%2Fday%2F8';try{localStorage.setItem('mastodon.server',ms);}finally{}}else{return false;}" target="_blank">Mastodon</a
+></span>]</span> this puzzle.</p>
+</main>
+
+<!-- ga -->
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-69522494-1', 'auto');
+ga('set', 'anonymizeIp', true);
+ga('send', 'pageview');
+</script>
+<!-- /ga -->
+</body>
+</html>
