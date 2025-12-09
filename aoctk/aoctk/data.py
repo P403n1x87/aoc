@@ -443,5 +443,32 @@ class Path2D(list):
 
         return inside
 
+    def contour(self) -> set:
+        """Get all the points in the immediate outside of the path."""
+        # Get all the outside points close to the path considering the
+        # orientation
+        o, spath, outside = self.orientation(), set(self), set()
+        for p, q in pairwise(chain(self, [self[0]])):
+            n = (p - q) * 1j * o
+            outside |= {p + n, q + n} - spath
+
+        return outside
+
     def __len__(self):
         return sum(m2d(p, q) for p, q in pairwise(chain(self, [self[0]])))
+
+    @classmethod
+    def from_vertices(cls, vertices: t.Iterable[complex]) -> "Path2D":
+        vs = [(v - u) for u, v in pairwise((*vertices, vertices[0]))]
+        path = [p := vertices[0]]
+        for v in vs:
+            try:
+                u = v / (m := abs(v))
+            except ZeroDivisionError:
+                continue
+            for _ in range(int(m)):
+                p += u
+                path.append(p)
+        path.pop()
+
+        return cls(path)
