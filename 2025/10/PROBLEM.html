@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<meta charset="utf-8"/>
+<title>Day 10 - Advent of Code 2025</title>
+<link rel="stylesheet" type="text/css" href="/static/style.css?32"/>
+<link rel="stylesheet alternate" type="text/css" href="/static/highcontrast.css?2" title="High Contrast"/>
+<link rel="shortcut icon" href="/favicon.png"/>
+<script>window.addEventListener('click', function(e,s,r){if(e.target.nodeName==='CODE'&&e.detail===3){s=window.getSelection();s.removeAllRanges();r=document.createRange();r.selectNodeContents(e.target);s.addRange(r);}});</script>
+</head><!--
+
+
+
+
+Oh, hello!  Funny seeing you here.
+
+I appreciate your enthusiasm, but you aren't going to find much down here.
+There certainly aren't clues to any of the puzzles.  The best surprises don't
+even appear in the source until you unlock them for real.
+
+Please be careful with automated requests; I'm not a massive company, and I can
+only take so much traffic.  Please be considerate so that everyone gets to play.
+
+If you're curious about how Advent of Code works, it's running on some custom
+Perl code. Other than a few integrations (auth, analytics, social media), I
+built the whole thing myself, including the design, animations, prose, and all
+of the puzzles.
+
+The puzzles are most of the work; preparing a new calendar and a new set of
+puzzles takes all of my free time for months every year. A lot of effort went
+into building this thing - I hope you're enjoying playing it as much as I
+enjoyed making it for you!
+
+If you'd like to hang out, I'm @was.tl on Bluesky and @ericwastl@hachyderm.io
+on Mastodon.
+
+- Eric Wastl
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->
+<body>
+<header><div><h1 class="title-global"><a href="/">Advent of Code</a></h1><nav><ul><li><a href="/2025/about">[About]</a></li><li><a href="/2025/events">[Events]</a></li><li><a href="/2025/shop">[Shop]</a></li><li><a href="/2025/settings">[Settings]</a></li><li><a href="/2025/auth/logout">[Log Out]</a></li></ul></nav><div class="user">P403n1x87 <span class="star-count">18*</span></div></div><div><h1 class="title-event">&nbsp;&nbsp;&nbsp;<span class="title-event-wrap">int y=</span><a href="/2025">2025</a><span class="title-event-wrap">;</span></h1><nav><ul><li><a href="/2025">[Calendar]</a></li><li><a href="/2025/support">[AoC++]</a></li><li><a href="/2025/sponsors">[Sponsors]</a></li><li><a href="/2025/leaderboard/private">[Leaderboards]</a></li><li><a href="/2025/stats">[Stats]</a></li></ul></nav></div></header>
+
+<div id="sidebar">
+<div id="sponsor"><div class="quiet">Our <a href="/2025/sponsors">sponsors</a> help make Advent of Code possible:</div><div class="sponsor"><a href="/2025/sponsors/redirect?url=https%3A%2F%2Fcoderabbit%2Elink%2Fadventofcode" target="_blank" onclick="if(ga)ga('send','event','sponsor','sidebar',this.href);" rel="noopener">CodeRabbit</a> - Cut Code Review Time and Bugs in Half</div></div>
+</div><!--/sidebar-->
+
+<main>
+<article class="day-desc"><h2>--- Day 10: Factory ---</h2><p>Just across the hall, you find a large factory. Fortunately, the Elves here have plenty of time to decorate. Unfortunately, it's because the factory machines are all offline, and none of the Elves can figure out the initialization procedure.</p>
+<p>The Elves do have the manual for the machines, but the section detailing the initialization procedure was eaten by a <a href="https://en.wikipedia.org/wiki/Shiba_Inu">Shiba Inu</a>. All that remains of the manual are some indicator light diagrams, button wiring schematics, and <a href="3">joltage</a> requirements for each machine.</p>
+<p>For example:</p>
+<pre><code>[.##.] (3) (1,3) (2) (2,3) (0,2) (0,1) {3,5,4,7}
+[...#.] (0,2,3,4) (2,3) (0,4) (0,1,2) (1,2,3,4) {7,5,12,7,2}
+[.###.#] (0,1,2,3,4) (0,3,4) (0,1,2,4,5) (1,2) {10,11,11,5,10,5}
+</code></pre>
+<p>The manual describes one machine per line. Each line contains a single indicator light diagram in <code>[</code>square brackets<code>]</code>, one or more button wiring schematics in <code>(</code>parentheses<code>)</code>, and joltage requirements in <code>{</code>curly braces<code>}</code>.</p>
+<p>To start a machine, its <em>indicator lights</em> must match those shown in the diagram, where <code>.</code> means <em>off</em> and <code>#</code> means <em>on</em>. The machine has the number of indicator lights shown, but its indicator lights are all <em>initially off</em>.</p>
+<p>So, an indicator light diagram like <code>[.##.]</code> means that the machine has four indicator lights which are initially off and that the goal is to simultaneously configure the first light to be off, the second light to be on, the third to be on, and the fourth to be off.</p>
+<p>You can <em>toggle</em> the state of indicator lights by pushing any of the listed <em>buttons</em>. Each button lists which indicator lights it toggles, where <code>0</code> means the first light, <code>1</code> means the second light, and so on. When you push a button, each listed indicator light either turns on (if it was off) or turns off (if it was on). You have to push each button an integer number of times; there's no such thing as "<span title="But only because these aren't A buttons.">0.5 presses</span>" (nor can you push a button a negative number of times).</p>
+<p>So, a button wiring schematic like <code>(0,3,4)</code> means that each time you push that button, the first, fourth, and fifth indicator lights would all toggle between on and off. If the indicator lights were <code>[#.....]</code>, pushing the button would change them to be <code>[...##.]</code> instead.</p>
+<p>Because none of the machines are running, the joltage requirements are irrelevant and can be safely ignored.</p>
+<p>You can push each button as many times as you like. However, to save on time, you will need to determine the <em>fewest total presses</em> required to correctly configure all indicator lights for all machines in your list.</p>
+<p>There are a few ways to correctly configure the first machine:</p>
+<pre><code>[.##.] (3) (1,3) (2) (2,3) (0,2) (0,1) {3,5,4,7}</code></pre>
+<ul>
+<li>You could press the first three buttons once each, a total of <code>3</code> button presses.</li>
+<li>You could press <code>(1,3)</code> once, <code>(2,3)</code> once, and <code>(0,1)</code> twice, a total of <code>4</code> button presses.</li>
+<li>You could press all of the buttons except <code>(1,3)</code> once each, a total of <code>5</code> button presses.</li>
+</ul>
+<p>However, the fewest button presses required is <code><em>2</em></code>. One way to do this is by pressing the last two buttons (<code>(0,2)</code> and <code>(0,1)</code>) once each.</p>
+<p>The second machine can be configured with as few as <code><em>3</em></code> button presses:</p>
+<pre><code>[...#.] (0,2,3,4) (2,3) (0,4) (0,1,2) (1,2,3,4) {7,5,12,7,2}</code></pre>
+<p>One way to achieve this is by pressing the last three buttons (<code>(0,4)</code>, <code>(0,1,2)</code>, and <code>(1,2,3,4)</code>) once each.</p>
+<p>The third machine has a total of six indicator lights that need to be configured correctly:</p>
+<pre><code>[.###.#] (0,1,2,3,4) (0,3,4) (0,1,2,4,5) (1,2) {10,11,11,5,10,5}</code></pre>
+<p>The fewest presses required to correctly configure it is <code><em>2</em></code>; one way to do this is by pressing buttons <code>(0,3,4)</code> and <code>(0,1,2,4,5)</code> once each.</p>
+<p>So, the fewest button presses required to correctly configure the indicator lights on all of the machines is <code>2</code> + <code>3</code> + <code>2</code> = <code><em>7</em></code>.</p>
+<p>Analyze each machine's indicator light diagram and button wiring schematics. <em>What is the fewest button presses required to correctly configure the indicator lights on all of the machines?</em></p>
+</article>
+<p>To begin, <a href="10/input" target="_blank">get your puzzle input</a>.</p>
+<form method="post" action="10/answer"><input type="hidden" name="level" value="1"/><p>Answer: <input type="text" name="answer" autocomplete="off"/> <input type="submit" value="[Submit]"/></p></form>
+<p>You can also <span class="share">[Share<span class="share-content">on
+  <a href="https://bsky.app/intent/compose?text=%22Factory%22+%2D+Day+10+%2D+Advent+of+Code+2025+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2025%2Fday%2F10" target="_blank">Bluesky</a>
+  <a href="https://twitter.com/intent/tweet?text=%22Factory%22+%2D+Day+10+%2D+Advent+of+Code+2025&amp;url=https%3A%2F%2Fadventofcode%2Ecom%2F2025%2Fday%2F10&amp;related=ericwastl&amp;hashtags=AdventOfCode" target="_blank">Twitter</a>
+  <a href="javascript:void(0);" onclick="var ms; try{ms=localStorage.getItem('mastodon.server')}finally{} if(typeof ms!=='string')ms=''; ms=prompt('Mastodon Server?',ms); if(typeof ms==='string' && ms.length){this.href='https://'+ms+'/share?text=%22Factory%22+%2D+Day+10+%2D+Advent+of+Code+2025+%23AdventOfCode+https%3A%2F%2Fadventofcode%2Ecom%2F2025%2Fday%2F10';try{localStorage.setItem('mastodon.server',ms);}finally{}}else{return false;}" target="_blank">Mastodon</a
+></span>]</span> this puzzle.</p>
+</main>
+
+<!-- ga -->
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-69522494-1', 'auto');
+ga('set', 'anonymizeIp', true);
+ga('send', 'pageview');
+</script>
+<!-- /ga -->
+</body>
+</html>
