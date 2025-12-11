@@ -4,6 +4,7 @@ from collections import defaultdict, deque
 from dataclasses import dataclass
 from functools import cached_property
 from itertools import chain, pairwise, product
+from pathlib import Path
 
 from aoctk.metric import manhattan2d as m2d
 
@@ -291,6 +292,58 @@ class Graph:
                 q.append(self.WeightedNode(wn.weight + self.weight(a, wn.node), a))
 
         return seen[end]
+
+    def paths(self, start, end):
+        q = [[start]]
+        paths = []
+
+        while q:
+            p = q.pop()
+            for a in self.adj(p[-1]):
+                if a in p:
+                    continue
+                if a == end:
+                    paths.append([*p, a])
+                else:
+                    q.append([*p, a])
+
+        return paths
+
+    def dot(self, output: Path) -> None:
+        with output.open("w") as f:
+            print("digraph input {", file=f)
+            for n, ls in self.data.items():
+                for t in ls:
+                    print(f"  {n} -> {t};", file=f)
+            print("}", file=f)
+
+    def inverse(self) -> "Graph":
+        g = {}
+
+        for n in self.data:
+            for a in self.adj(n):
+                g.setdefault(a, set()).add(n)
+
+        return type(self)(g)
+
+    def reachable_from(self, n) -> set:
+        r, q = {n}, [n]
+        while q:
+            for a in self.adj(q.pop()):
+                if a in r:
+                    continue
+                r.add(a)
+                q.append(a)
+        return r
+
+    def subgraph(self, nodes: set) -> "Graph":
+        return type(self)(
+            {
+                k: {_ for _ in v if _ in nodes}
+                for k, v in self.data.items()
+                if k in nodes
+            }
+        )
 
     def brachistochrone(self, start, end, heuristic=lambda n, e: 0):
         """Return the minimum time to travel from start to end.
